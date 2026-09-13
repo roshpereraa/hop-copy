@@ -351,10 +351,6 @@ main { position: relative; z-index: 2; }
 .lockup .mark { width: 21vw; height: 16vw; color: var(--accent); filter: drop-shadow(0 0 3vw #39ff7a66); }
 .lockup span { font: 900 27vw/.8 var(--display); letter-spacing: .01em; }
 
-/* ---------- chat ---------- */
-.chat { position: fixed; right: 12px; bottom: 60px; z-index: 45; width: 44px; height: 44px; border: 0; border-radius: 8px; background: var(--accent); color: #03140a; box-shadow: 0 6px 20px #0006, 0 0 16px #39ff7a55; transition: transform .25s; }
-.chat:hover { transform: scale(1.08) rotate(-4deg); }
-.chat svg { width: 22px; height: 22px; }
 
 .reveal { opacity: 0; transform: translateY(20px); }
 
