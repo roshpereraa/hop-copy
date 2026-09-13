@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LEAP — Call the price</title>
+  <meta name="description" content="LEAP is a precision forecasting playground. Call the exact price, closest calls earn the most." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23120a24'/><circle cx='22' cy='24' r='10' fill='%23ff2bd6'/><circle cx='42' cy='24' r='10' fill='%23ff2bd6'/><rect x='12' y='30' width='40' height='24' rx='10' fill='white'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=Saira:wght@700;800&family=Space+Mono:wght@400;700&family=Tomorrow:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <!-- Preloader -->
+  <div class="loader" id="loader">
+    <div class="loader__logo"><svg class="frog-glyph"><use href="#frog" /></svg><span>LEAP</span></div>
+    <div class="loader__bar"><i id="loaderBar"></i></div>
+  </div>
+
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <symbol id="frog" viewBox="0 0 64 56">
+        <path fill="currentColor" fill-rule="evenodd" d="M16 0a12 12 0 0 1 11.3 8h9.4A12 12 0 1 1 55.6 19 14 14 0 0 1 64 31.8V42a14 14 0 0 1-14 14H14A14 14 0 0 1 0 42V31.8A14 14 0 0 1 8.4 19 12 12 0 0 1 16 0Zm0 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm32 0a6 6 0 1 0 0 12 6 6 0 0 0 0-12ZM20 38a2.5 2.5 0 0 0-2 4c3.4 4 8.6 6 14 6s10.6-2 14-6a2.5 2.5 0 1 0-4-3c-2.4 2.8-6 4-10 4s-7.6-1.2-10-4a2.5 2.5 0 0 0-2-1Z"/>
+      </symbol>
+      <symbol id="x" viewBox="0 0 24 24"><path fill="currentColor" d="M17.8 2h3.4l-7.4 8.5L22.5 22h-6.8l-5.3-7-6.1 7H.9l7.9-9.1L.5 2h7l4.8 6.4L17.8 2Zm-1.2 18h1.9L6.5 3.9h-2L16.6 20Z"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- Fixed 3D stage -->
+  <canvas id="stage"></canvas>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- Announcement + nav -->
+  <header class="top" id="top">
+    <div class="announce" id="announce">
+      <a href="#pools">Live precision pools on Nova Chain · settled in USDX · Open the app <span>→</span></a>
+      <button class="announce__close" aria-label="Close" id="announceClose">×</button>
+    </div>
+    <nav class="nav">
+      <a href="#" class="logo"><svg class="frog-glyph"><use href="#frog" /></svg><span>LEAP</span></a>
+      <div class="nav__links">
+        <a href="#pools" data-scramble>Pools</a>
+        <a href="#board" data-scramble>Leaderboard</a>
+        <a href="#how" data-scramble>How it works</a>
+        <a href="#paper" data-scramble>Whitepaper</a>
+        <a href="#" class="nav__x" aria-label="X"><svg><use href="#x" /></svg></a>
+        <a href="#pools" class="btn btn--sm">Open App</a>
+      </div>
+      <button class="nav__burger" aria-label="Menu"><i></i><i></i></button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="plus-field" data-plus="14"></div>
+      <div class="hero__copy">
+        <h1 class="hero__title">
+          <span class="line" data-type>SKIP THE COIN FLIP.</span>
+          <span class="line line--pink" data-type>NAME THE PRICE.</span>
+        </h1>
+        <p class="hero__lede reveal">LEAP is a precision market for people who think in numbers. Call where a token, an index or a meme will close, stake USDX, and earn a slice of the pool based on how near you get.</p>
+        <p class="hero__lede reveal">No wrong answers. Just longer distances.</p>
+        <a href="#pools" class="btn btn--glow reveal">Open App</a>
+      </div>
+      <div class="hero__scroll">
+        <span>Scroll to see how it works</span>
+        <div class="hero__arrows"><i>▼</i><i>▼</i></div>
+      </div>
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee__track" id="marquee"></div>
+      </div>
+    </section>
+
+    <!-- PINNED STORY -->
+    <section class="story" id="how">
+      <div class="story__pin">
+        <div class="streak" id="streak"></div>
+        <div class="ghosts" aria-hidden="true">
+          <span class="ghost g1">?!</span><span class="ghost g2">$</span><span class="ghost g3">!!</span><span class="ghost g4">%</span>
+        </div>
+
+        <div class="beat" data-beat="0">
+          <div class="beat__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="24" cy="24" r="6"/><path d="M24 6a18 18 0 1 1-17 12"/><path d="M24 12a12 12 0 1 1-11 7"/><path d="M34 4l-4 8 8-2"/></svg></div>
+          <h2 class="beat__title">Call a number.</h2>
+          <p class="beat__sub">Not higher or lower. The actual close.</p>
+          <p class="beat__sig">— LEAP —</p>
+        </div>
+
+        <div class="beat" data-beat="1">
+          <div class="beat__row">
+            <span class="chip chip--lg"><i class="dot dot--lime"></i>Nova Chain</span><b>·</b>
+            <span class="chip chip--lg"><i class="dot dot--green"></i>USDX</span>
+          </div>
+          <p class="beat__sub">Tokenised assets, live feeds, settled on-chain.</p>
+          <p class="beat__sig">— LEAP —</p>
+        </div>
+
+        <div class="beat" data-beat="2">
+          <div class="beat__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"><rect x="6" y="14" width="36" height="26" rx="6"/><path d="M12 14l18-8 4 8"/><circle cx="34" cy="27" r="2.5" fill="currentColor"/></svg></div>
+          <div class="beat__row">
+            <span class="chip chip--lg"><i class="dot dot--white"></i>ORBT</span><b>·</b>
+            <span class="chip chip--lg"><i class="dot dot--green"></i>NOVA</span><b>·</b>
+            <span class="chip chip--lg"><i class="dot dot--red"></i>VOLT</span>
+          </div>
+          <p class="beat__sub">Put USDX behind the figure you trust.</p>
+          <p class="beat__sig">— LEAP —</p>
+        </div>
+
+        <div class="beat" data-beat="3">
+          <div class="beat__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8v32h32"/><path d="M14 32c6-2 10-8 14-16"/><path d="M22 14l6 2 2-6"/></svg></div>
+          <h2 class="beat__title">Nearer earns more.</h2>
+          <p class="beat__sub">precision × timing × nerve</p>
+          <p class="beat__sig">— LEAP —</p>
+        </div>
+
+        <div class="beat" data-beat="4">
+          <div class="beat__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6h20v10a10 10 0 0 1-20 0V6Z"/><path d="M14 10H7v3a7 7 0 0 0 7 7M34 10h7v3a7 7 0 0 1-7 7M24 26v8M16 42h16l-2-8H18l-2 8Z"/></svg></div>
+          <h2 class="beat__title">Everyone places.</h2>
+          <p class="beat__sub">Each call earns part of the pool.</p>
+          <p class="beat__sig">— LEAP —</p>
+        </div>
+
+        <div class="caption caption--left" data-beat="5">
+          <div class="caption__chips"><span class="chip"><i class="dot dot--lime"></i>Nova Chain</span><span class="chip"><i class="dot dot--green"></i>USDX</span></div>
+          <p data-type>RUNS ON NOVA CHAIN. A FAST L2 WITH SUB-SECOND BLOCKS AND FEES UNDER A CENT.</p>
+        </div>
+        <div class="caption caption--right" data-beat="6">
+          <div class="caption__chips"><span class="chip"><i class="dot dot--white"></i>ORBT</span><span class="chip"><i class="dot dot--green"></i>NOVA</span><span class="chip"><i class="dot dot--red"></i>VOLT</span><span class="chip"><i class="dot dot--blue"></i>DRFT</span></div>
+          <p data-type>MANY MARKETS, ONE FIGURE. TOKENS, INDICES AND MEMES, PRICED LIVE.</p>
+        </div>
+        <div class="caption caption--left caption--low" data-beat="7">
+          <div class="caption__chips"><span class="chip"><i class="dot dot--green"></i>USDX</span><span class="chip"><i class="dot dot--lime"></i>Nova Chain</span></div>
+          <p data-type>PAID OUT IN USDX. WINNINGS GO DIRECTLY TO YOUR WALLET.</p>
+        </div>
+        <div class="hexdump" aria-hidden="true" id="hexdump"></div>
+      </div>
+    </section>
+
+    <!-- INTRO / GLITCH MASK -->
+    <section class="intro">
+      <div class="plus-field" data-plus="16"></div>
+      <div class="intro__band">
+        <h2 class="scramble-title" data-scramble-in>LEAP IS A <em>PRECISION MARKET</em></h2>
+        <p class="body-copy reveal">Most forecasting apps want a yes or a no. LEAP wants a figure. Every call in a pool gets scored on its distance from the close, how early it arrived and how long it held; your cut is that score multiplied by your stake. Nobody loses outright. Some calls just land further away.</p>
+      </div>
+    </section>
+
+    <section class="mask-sec" id="pools">
+      <div class="mask-sec__inner">
+        <div class="mask" id="mask">
+          <div class="mask__shards" id="shards"></div>
+          <svg class="mask__face" viewBox="0 0 240 240" fill="none">
+            <defs>
+              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <g filter="url(#glow)" stroke="#ff39e0" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="78" cy="72" r="34"/><circle cx="162" cy="72" r="34"/>
+              <path d="M44 100c-14 14-20 34-18 56 4 38 42 58 94 58s90-20 94-58c2-22-4-42-18-56"/>
+              <path d="M66 62l24 20M90 62L66 82M150 62l24 20M174 62l-24 20" stroke="#fff"/>
+              <path d="M84 168c10 12 22 16 36 16s26-4 36-16"/>
+              <path d="M40 132l-20 4M200 132l20 4" stroke-width="3"/>
+            </g>
+          </svg>
+        </div>
+        <div class="mask-sec__copy">
+          <h2 class="scramble-title scramble-title--left" data-scramble-in>PICK A POOL</h2>
+          <p class="body-copy body-copy--left reveal">Every pool is a single asset and a single close time. Scroll through what's running — tokens, indices and chain memes — see the pot, the entry count and the countdown, then drop your figure before it locks.</p>
+          <div class="chips-row reveal">
+            <span class="chip chip--pill"><i class="dot dot--lime"></i>Nova Chain</span>
+            <span class="chip"><i class="dot dot--white"></i>ORBT</span>
+            <span class="chip"><i class="dot dot--green"></i>NOVA</span>
+            <span class="chip"><i class="dot dot--red"></i>VOLT</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="post">
+      <div class="plus-field" data-plus="14"></div>
+      <div class="post__inner">
+        <div class="post__copy">
+          <h2 class="scramble-title scramble-title--left" data-scramble-in>POST YOUR FIGURE</h2>
+          <p class="body-copy body-copy--left reveal">Enter the price you expect and stake from 0.50 USDX. Early calls pick up a timing multiplier, and every change after the first costs a little conviction — so decide, then hold.</p>
+          <div class="chips-row reveal"><span class="chip chip--pill"><i class="dot dot--green"></i>USDX</span><span class="chip"><i class="dot dot--lime"></i>Nova Chain</span></div>
+        </div>
+        <div class="bot" id="bot" aria-hidden="true">
+          <div class="bot__ears"><i></i><i></i></div>
+          <div class="bot__cube">
+            <div class="bot__face"><b></b><b></b><span></span></div>
+          </div>
+          <div class="bot__cord"></div>
+        </div>
+      </div>
+      <div class="cloud" aria-hidden="true"></div>
+    </section>
+
+    <!-- UNDER THE HOOD -->
+    <section class="hood" id="board">
+      <div class="plus-side plus-side--l"></div><div class="plus-side plus-side--r"></div>
+      <h2 class="scramble-title" data-scramble-in>WHAT'S UNDER THE <em>HOOD</em></h2>
+      <p class="body-copy reveal">Eight ideas that make LEAP play differently: wallet-only access, a timing multiplier for early calls, distance scoring instead of yes/no, one visible house fee, live price feeds, USDX settlement on Nova Chain and a public leaderboard for accuracy.</p>
+      <div class="hood__wrap">
+        <button class="arrow arrow--l" id="hoodPrev" aria-label="Previous">←</button>
+        <div class="hood__viewport">
+          <div class="hood__track" id="hoodTrack"></div>
+        </div>
+        <button class="arrow arrow--r" id="hoodNext" aria-label="Next">→</button>
+      </div>
+      <div class="hood__progress"><span id="hoodCount">[1/8]</span><div class="hood__bar"><i id="hoodBar"></i></div></div>
+    </section>
+
+    <!-- EXPANDING PREVIEW -->
+    <section class="preview" id="paper">
+      <div class="preview__stick">
+        <div class="preview__grid"><i></i><i></i><i></i></div>
+        <div class="preview__screen" id="previewScreen">
+          <div class="preview__logo"><svg class="frog-glyph"><use href="#frog" /></svg>LEAP</div>
+          <div class="preview__tag">Skip the coin flip. <em>Name the price.</em></div>
+          <div class="preview__btn">Open App</div>
+          <div class="preview__device">
+            <div class="preview__dhead"><span></span><span></span><span></span></div>
+            <div class="preview__dbody"><b>SKIP THE COIN FLIP.</b><b class="pink">NAME THE PRICE.</b><i></i><i></i><i class="short"></i></div>
+          </div>
+          <div class="coin c1">◉</div><div class="coin c2">◉</div><div class="coin c3">◉</div><div class="coin c4">◉</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHO WE ARE -->
+    <section class="about">
+      <div class="plus-side plus-side--l"></div><div class="plus-side plus-side--r"></div>
+      <div class="about__block">
+        <h2 class="scramble-title" data-scramble-in>WHO WE ARE —<br /><em>ON-CHAIN, IN THE OPEN</em></h2>
+        <p class="body-copy reveal">We kept calling the move and missing the magnitude, and every app we tried only cared about the move. So we made one that cares about the magnitude. LEAP runs on Nova Chain, publishes its scoring, and pays out USDX with ordinary transfers anyone can check.</p>
+      </div>
+      <div class="about__block">
+        <h2 class="scramble-title" data-scramble-in>OUR MISSION: <em>REWARD PRECISION</em></h2>
+        <p class="body-copy reveal">A forecast should be a figure, not a guess at a direction. LEAP pays the players who are nearest, earliest and most steady — and puts the proof on a leaderboard for everyone to see.</p>
+      </div>
+    </section>
+
+    <!-- PARTNERS -->
+    <section class="partners">
+      <button class="arrow arrow--l" id="partPrev" aria-label="Previous">←</button>
+      <div class="partners__track" id="partTrack">
+        <article class="partner">
+          <h4>[Nova Chain]</h4>
+          <div class="partner__logo partner__logo--lime"><svg viewBox="0 0 64 64"><path d="M44 10c-14 2-26 14-28 30l-4 14 10-8c14-2 26-14 28-30 1-2-4-7-6-6ZM22 44l14-14" fill="none" stroke="#141414" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <p>The L2 where pools live. Stakes, scoring and payouts all clear here — quick blocks, tiny fees, live tokenised assets.</p>
+        </article>
+        <article class="partner">
+          <h4>[USDX]</h4>
+          <div class="partner__logo partner__logo--coin brackets"><span>$</span></div>
+          <p>The unit behind every pool. You stake in USDX, the pot is held in USDX, and winnings arrive as USDX in your wallet.</p>
+        </article>
+        <article class="partner">
+          <h4>[Your Wallet]</h4>
+          <div class="partner__logo brackets"><svg class="frog-glyph big"><use href="#frog" /></svg></div>
+          <p>Connect the wallet you already use. Stakes sit in the pool contract only until close, then payouts go straight back.</p>
+        </article>
+        <article class="partner">
+          <h4>[Live Feeds]</h4>
+          <div class="partner__logo brackets"><svg viewBox="0 0 64 64" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 44l14-14 10 10 20-22"/><path d="M40 16h12v12"/></svg></div>
+          <p>Prices stream from independent oracles and every close is written on-chain, so the final figure is never up for debate.</p>
+        </article>
+      </div>
+      <button class="arrow arrow--r" id="partNext" aria-label="Next">→</button>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer__grid">
+        <div class="footer__col footer__col--brand">
+          <h5>LEAP</h5>
+          <p class="footer__blurb reveal">A forecasting market that asks for a figure, not a side. Choose a pool, enter the price you expect, stake USDX. When it closes, the pot is divided by score × stake — nobody is simply wrong, some are just further off. Everything settles in USDX on Nova Chain, right back to your wallet.</p>
+          <div class="badges">
+            <div class="badge badge--big"><svg class="frog-glyph pinkglyph"><use href="#frog" /></svg><span>Settled in <b>USDX</b> on Nova Chain</span></div>
+            <div class="badge"><i class="tick">◆</i><span>Scoring is <b>public</b>: precision × timing × nerve</span></div>
+            <div class="badge"><i class="tick">✓</i><span>Connect with <b>your wallet</b>, payouts return to it</span></div>
+            <div class="badge"><i class="tick">✓</i><span>House fee <b>3 %</b>, nothing hidden</span></div>
+            <div class="badge"><i class="tick">✳</i><span><b>Built</b> for Nova Chain</span></div>
+          </div>
+          <div class="footer__social"><svg class="frog-glyph"><use href="#frog" /></svg><svg class="xi"><use href="#x" /></svg><span>Everything happens in the app</span></div>
+        </div>
+        <div class="footer__col">
+          <h5>Features</h5>
+          <ul><li><a data-scramble href="#board">What's under the hood</a></li><li><a data-scramble href="#how">How it works</a></li><li><a data-scramble href="#pools">Live pools</a></li><li><a data-scramble href="#board">Leaderboard</a></li></ul>
+        </div>
+        <div class="footer__col">
+          <h5>The App</h5>
+          <ul><li><a data-scramble href="#pools">Open app</a></li><li><a data-scramble href="#paper">Whitepaper</a></li></ul>
+          <div class="chips-row"><span class="chip"><i class="dot dot--green"></i>USDX</span><span class="chip"><i class="dot dot--lime"></i>Nova Chain</span></div>
+        </div>
+        <div class="footer__legal"><span>© 2026 LEAP Markets (demo)</span><a href="#">Privacy</a><a href="#">Cookies</a><a href="#">Terms</a><a href="#how">How it works</a></div>
+      </div>
+      <div class="lockup" id="lockup">
+        <svg class="frog-glyph"><use href="#frog" /></svg>
+        <span>LEAP</span>
+      </div>
+    </footer>
+  </main>
+
+  <button class="chat" aria-label="Chat"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 3C6.5 3 2 6.6 2 11c0 2.2 1.1 4.2 3 5.6V21l4-2.3c1 .2 2 .3 3 .3 5.5 0 10-3.6 10-8s-4.5-8-10-8Zm-4 9.3a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Z"/></svg></button>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
