@@ -35,13 +35,13 @@ $$('[data-plus]').forEach((field) => {
 });
 
 const TICKS = [
-  ['dot--white', 'ORBT'], ['dot--green', 'NOVA'], ['dot--red', 'VOLT'], ['dot--blue', 'DRFT'],
-  ['dot--lime', 'KITE'], ['dot--white', 'PRSM'], ['dot--red', 'GLOW'], ['lbl', 'Settled in'],
-  ['dot--green', 'USDX'], ['dot--lime', 'Nova Chain'], ['lbl', 'Markets you can call'],
+  ['dot--green', '25-min sprints'], ['dot--blue', 'Deep work · 90'], ['sep', '/'], ['dot--lime', 'Squad sessions'],
+  ['dot--white', 'Ambient mixer'], ['sep', '/'], ['dot--green', 'Focus shield'], ['dot--blue', 'Weekly flight log'],
+  ['sep', '/'], ['dot--lime', 'No ads'], ['dot--white', 'Works offline'], ['sep', '/'],
 ];
 const marquee = $('#marquee');
-const tickHTML = TICKS.map(([c, t]) => c === 'lbl'
-  ? `<span class="tick-item lbl">${t}</span>`
+const tickHTML = TICKS.map(([c, t]) => c === 'sep'
+  ? `<span class="tick-item sep">${t}</span>`
   : `<span class="tick-item"><i class="dot ${c}"></i>${t}</span>`).join('');
 marquee.innerHTML = tickHTML.repeat(4);
 
@@ -129,6 +129,14 @@ $$('.reveal').filter((el) => !el.closest('.hero')).forEach((el) => {
 /* ---------------- announcement ---------------- */
 $('#announceClose').addEventListener('click', () => $('#announce').classList.add('hide'));
 
+/* ---------------- mobile menu ---------------- */
+const burger = $('#burger'), navLinks = $('#navLinks');
+const setMenu = (open) => { navLinks.classList.toggle('open', open); burger.setAttribute('aria-expanded', String(open)); };
+burger.addEventListener('click', () => setMenu(!navLinks.classList.contains('open')));
+$$('a', navLinks).forEach((a) => a.addEventListener('click', () => setMenu(false)));
+addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
+lenis.on('scroll', () => { if (navLinks.classList.contains('open')) setMenu(false); });
+
 /* ---------------- 3D mascot + story ---------------- */
 const mascot = createMascot($('#stage'));
 if (import.meta.env.DEV) Object.assign(window, { __mascot: mascot, __ST: ScrollTrigger, __lenis: lenis });
@@ -140,7 +148,10 @@ ScrollTrigger.create({
   onUpdate: (self) => mascot.setProgress(self.progress),
 });
 // mascot canvas off-screen further down — skip rendering
-ScrollTrigger.create({ trigger: story, start: 'top top', end: 'bottom top', onLeave: () => mascot.setVisible(false), onEnterBack: () => mascot.setVisible(true) });
+// hard-hide once the story ends so a lagging (smoothed) mascot never overlaps later sections
+const stage = $('#stage');
+const showStage = (v) => { mascot.setVisible(v); stage.style.visibility = v ? 'visible' : 'hidden'; };
+ScrollTrigger.create({ trigger: story, start: 'top top', end: 'bottom 60%', onLeave: () => showStage(false), onEnterBack: () => showStage(true) });
 
 // hero copy drifts up as the dive starts
 gsap.to('.hero__copy, .hero__scroll', { y: -120, opacity: 0, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom 30%', scrub: true } });
@@ -198,21 +209,22 @@ setInterval(() => {
   gsap.fromTo(face, { x: gsap.utils.random(-12, 12), skewX: gsap.utils.random(-20, 20) }, { x: 0, skewX: 0, duration: 0.18, ease: 'steps(3)' });
 }, 900);
 
-/* ---------------- floating bot ---------------- */
-gsap.to('#bot', { y: -18, rotate: 4, duration: 2.4, yoyo: true, repeat: -1, ease: 'sine.inOut' });
-gsap.fromTo('#bot', { rotateY: -35 }, { rotateY: 25, ease: 'none', scrollTrigger: { trigger: '.post', start: 'top bottom', end: 'bottom top', scrub: true } });
-gsap.fromTo('.cloud', { y: 120, scale: 0.8 }, { y: -40, scale: 1.1, ease: 'none', scrollTrigger: { trigger: '.post', start: 'top bottom', end: 'bottom top', scrub: true } });
+/* ---------------- floating radio ---------------- */
+gsap.to('.radio__body', { y: -14, rotate: -3, duration: 2.4, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+gsap.to('.radio__antenna', { rotate: 18, duration: 2.4, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+gsap.fromTo('#radio', { rotate: -8, x: 40 }, { rotate: 6, x: -20, ease: 'none', scrollTrigger: { trigger: '.post', start: 'top bottom', end: 'bottom top', scrub: true } });
+gsap.fromTo('.wave-blob', { y: 120, scale: 0.8 }, { y: -40, scale: 1.1, ease: 'none', scrollTrigger: { trigger: '.post', start: 'top bottom', end: 'bottom top', scrub: true } });
 
-/* ---------------- under the hood carousel ---------------- */
+/* ---------------- cockpit (features) carousel ---------------- */
 const CARDS = [
-  ['Wallet Sign-in', 'Connect the wallet you already hold. No sign-up, no password, no custody — winnings return to the same address.', 'rods'],
-  ['Timing Bonus', 'Call early and your score can grow up to 1.5×. The opening moments of a pool count most; commitment beats a late tweak.', 'burst'],
-  ['Precision Scoring', 'No yes/no. Each call is scored by distance from the close — miss by 1% and you keep half the score — so the pot is shared by accuracy.', 'coil'],
-  ['One House Fee', 'A flat 3% comes off the pot at close. No spreads, no hidden edges, no surprise withdrawal costs.', 'rings'],
-  ['Live Feeds', 'Independent oracles stream prices every second, and the final print is written on-chain so anyone can check it.', 'wave'],
-  ['USDX Settlement', 'Stake, pot and payout all in USDX. What you see on the board is exactly what arrives in your wallet.', 'bars'],
-  ['Public Leaderboard', 'Precision, timing and streaks ranked in the open. Reputation is earned one close at a time.', 'spiral'],
-  ['Built on Nova', 'Sub-second blocks and fees under a cent make it cheap to take part in dozens of pools at once.', 'grid'],
+  ['Focus Timer', 'Sprints, deep sessions or a custom length. One tap to start, and the timer keeps running even if you lock the screen.', 'rings'],
+  ['Focus Shield', 'Notifications wait politely until you land. Pick which people or apps are allowed to break through.', 'shield'],
+  ['Squad Sessions', 'Start a session with friends and fly in formation. If one person leaves early, the whole squad loses a little lift.', 'burst'],
+  ['Glide Streaks', 'Streaks that forgive a missed day. Take one rest day a week without losing the distance you have built.', 'bars'],
+  ['Calendar Sync', 'Glide reads your calendar, spots the empty blocks and suggests a session before a meeting eats the afternoon.', 'grid'],
+  ['Ambient Mixer', 'Blend up to three soundscapes — rain, café murmur, brown noise — and save the mix for next time.', 'wave'],
+  ['Weekly Flight Log', 'A calm Sunday recap of where your attention went, which hours worked best and how far Pip travelled.', 'spiral'],
+  ['Offline Mode', 'No signal, no problem. Sessions record locally and sync quietly once you are back online.', 'coil'],
 ];
 const track = $('#hoodTrack');
 track.innerHTML = CARDS.map(([t, d], i) => `
@@ -221,7 +233,7 @@ track.innerHTML = CARDS.map(([t, d], i) => `
     <canvas data-art="${CARDS[i][2]}"></canvas>
     <div class="card__plus"><i class="plus"></i><i class="plus"></i></div>
     <p>${d}</p>
-    <a class="card__cta" href="#pools">Open Pool</a>
+    <a class="card__cta" href="#download">Try it</a>
   </article>`).join('');
 
 const perView = () => (innerWidth <= 900 ? 1 : 3);
@@ -230,45 +242,52 @@ function hoodGo(d) {
   const max = CARDS.length - perView();
   hoodIdx = (hoodIdx + d + max + 1) % (max + 1);
   track.style.transform = `translateX(-${(100 / perView()) * hoodIdx}%)`;
-  $('#hoodCount').textContent = `[${hoodIdx + 1}/${CARDS.length}]`;
+  $('#hoodCount').textContent = `[${hoodIdx + 1}/${max + 1}]`;
   const bar = $('#hoodBar');
-  bar.style.marginLeft = `${(hoodIdx / CARDS.length) * 100}%`;
+  bar.style.width = `${100 / (max + 1)}%`;
+  bar.style.marginLeft = `${(hoodIdx / (max + 1)) * 100}%`;
   $$('.card', track).forEach((c, i) => c.classList.toggle('is-hot', i === hoodIdx + Math.floor(perView() / 2)));
 }
 $('#hoodPrev').onclick = () => hoodGo(-1);
 $('#hoodNext').onclick = () => hoodGo(1);
 
 // neon canvas art
+const G = '#39ff7a', B = '#4d8dff';
 const arts = $$('canvas[data-art]').map((c) => ({ c, ctx: c.getContext('2d'), kind: c.dataset.art }));
 function sizeArts() {
   const dpr = Math.min(devicePixelRatio, 2);
   arts.forEach((a) => { a.c.width = a.c.clientWidth * dpr; a.c.height = a.c.clientHeight * dpr; a.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); });
 }
-function neonStroke(ctx, w, col = '#ff39e0') {
+function neonStroke(ctx, w, col = G) {
   ctx.lineCap = 'round';
   ctx.strokeStyle = col; ctx.shadowColor = col; ctx.shadowBlur = 18; ctx.lineWidth = w; ctx.stroke();
-  ctx.shadowBlur = 0; ctx.strokeStyle = '#ffe6fb'; ctx.lineWidth = w * 0.35; ctx.stroke();
+  ctx.shadowBlur = 0; ctx.strokeStyle = '#eafff1'; ctx.lineWidth = w * 0.35; ctx.stroke();
 }
 function drawArt({ c, ctx, kind }, t) {
   const W = c.clientWidth, H = c.clientHeight, cx = W / 2, cy = H / 2;
   ctx.clearRect(0, 0, W, H);
   ctx.save();
-  if (kind === 'rods') {
+  if (kind === 'shield') {
+    const pulse = Math.sin(t * 2) * 0.5 + 0.5;
+    ctx.beginPath(); ctx.moveTo(cx, cy - 70); ctx.lineTo(cx + 56, cy - 48); ctx.lineTo(cx + 50, cy + 16);
+    ctx.quadraticCurveTo(cx + 36, cy + 56, cx, cy + 74); ctx.quadraticCurveTo(cx - 36, cy + 56, cx - 50, cy + 16);
+    ctx.lineTo(cx - 56, cy - 48); ctx.closePath(); neonStroke(ctx, 5);
     for (let i = 0; i < 3; i++) {
-      const x = cx - 26 + i * 26, sw = Math.sin(t * 2 + i) * 10;
-      ctx.beginPath(); ctx.moveTo(x - 8 + sw, cy - 70 + i * 10); ctx.lineTo(x + 6, cy + 60); neonStroke(ctx, 7);
+      const r = 20 + ((t * 30 + i * 30) % 90);
+      ctx.beginPath(); ctx.arc(cx, cy, r, -2.4, -0.7); ctx.globalAlpha = Math.max(0, 1 - r / 110); neonStroke(ctx, 3, B); ctx.globalAlpha = 1;
     }
+    ctx.beginPath(); ctx.moveTo(cx - 20, cy); ctx.lineTo(cx - 4, cy + 16); ctx.lineTo(cx + 24, cy - 16); neonStroke(ctx, 5 + pulse * 2, '#b8ff3c');
   } else if (kind === 'burst') {
     for (let i = 0; i < 9; i++) {
       const a = (i / 9) * Math.PI * 2 + t * 0.4, r1 = 20, r2 = 70 + Math.sin(t * 3 + i) * 18;
       ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
       ctx.lineTo(cx + Math.cos(a + 0.2) * (r2 * 0.6), cy + Math.sin(a + 0.2) * (r2 * 0.6));
-      ctx.lineTo(cx + Math.cos(a) * r2, cy + Math.sin(a) * r2); neonStroke(ctx, 3, i % 2 ? '#b27dff' : '#ff39e0');
+      ctx.lineTo(cx + Math.cos(a) * r2, cy + Math.sin(a) * r2); neonStroke(ctx, 3, i % 2 ? B : G);
     }
     for (let i = 0; i < 10; i++) {
       const a = i * 2.4 + t * 0.2, r = 26 + (i % 3) * 8;
       ctx.beginPath(); ctx.arc(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.6, 12 + (i % 4) * 3, 0, 7);
-      ctx.fillStyle = '#1c1030'; ctx.fill();
+      ctx.fillStyle = '#0a1a40'; ctx.fill();
     }
   } else if (kind === 'coil') {
     ctx.beginPath();
@@ -276,34 +295,34 @@ function drawArt({ c, ctx, kind }, t) {
       const r = 18 + a * 1.9, x = cx + Math.cos(a + t) * r * 0.9, y = cy + Math.sin(a * 1.02 + t) * r * 0.55;
       a === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
-    ctx.lineWidth = 2.2; ctx.strokeStyle = '#ff2b9e'; ctx.shadowColor = '#ff2b9e'; ctx.shadowBlur = 10; ctx.stroke();
+    ctx.lineWidth = 2.2; ctx.strokeStyle = G; ctx.shadowColor = G; ctx.shadowBlur = 10; ctx.stroke();
   } else if (kind === 'rings') {
     for (let i = 0; i < 3; i++) {
-      ctx.beginPath(); ctx.ellipse(cx, cy, 70 - i * 16, 22 + i * 6, t * (0.5 + i * 0.3) + i, 0, Math.PI * 2); neonStroke(ctx, 4, i === 1 ? '#8a5bff' : '#ff39e0');
+      ctx.beginPath(); ctx.ellipse(cx, cy, 70 - i * 16, 22 + i * 6, t * (0.5 + i * 0.3) + i, 0, Math.PI * 2); neonStroke(ctx, 4, i === 1 ? B : G);
     }
-    ctx.beginPath(); ctx.arc(cx, cy, 10, 0, 7); ctx.fillStyle = '#fff'; ctx.shadowColor = '#ff39e0'; ctx.shadowBlur = 30; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy, 10, 0, 7); ctx.fillStyle = '#fff'; ctx.shadowColor = G; ctx.shadowBlur = 30; ctx.fill();
   } else if (kind === 'wave') {
     for (let k = 0; k < 3; k++) {
       ctx.beginPath();
       for (let x = 20; x < W - 20; x += 4) { const y = cy + Math.sin(x * 0.03 + t * 2 + k) * (30 - k * 8) * Math.sin(x / W * Math.PI); x === 20 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
-      neonStroke(ctx, 3.5 - k, k === 1 ? '#8a5bff' : '#ff39e0');
+      neonStroke(ctx, 3.5 - k, k === 1 ? B : G);
     }
   } else if (kind === 'bars') {
     for (let i = 0; i < 7; i++) {
       const h = 30 + (Math.sin(t * 2 + i * 0.9) * 0.5 + 0.5) * 90, x = cx - 84 + i * 28;
-      ctx.beginPath(); ctx.moveTo(x, cy + 70); ctx.lineTo(x, cy + 70 - h); neonStroke(ctx, 9, i === 3 ? '#ffffff' : '#ff39e0');
+      ctx.beginPath(); ctx.moveTo(x, cy + 70); ctx.lineTo(x, cy + 70 - h); neonStroke(ctx, 9, i === 3 ? '#ffffff' : G);
     }
   } else if (kind === 'spiral') {
     for (let i = 0; i < 5; i++) {
       const y = cy + 60 - i * 30, w = 30 + i * 14 + Math.sin(t * 2 + i) * 6;
-      ctx.beginPath(); ctx.moveTo(cx - w, y); ctx.lineTo(cx + w, y); neonStroke(ctx, 6, i === 4 ? '#fff' : '#ff39e0');
+      ctx.beginPath(); ctx.moveTo(cx - w, y); ctx.lineTo(cx + w, y); neonStroke(ctx, 6, i === 4 ? '#fff' : G);
     }
-    ctx.beginPath(); ctx.moveTo(cx - 16, cy - 84); ctx.lineTo(cx, cy - 104 - Math.sin(t * 3) * 6); ctx.lineTo(cx + 16, cy - 84); neonStroke(ctx, 4, '#b27dff');
+    ctx.beginPath(); ctx.moveTo(cx - 16, cy - 84); ctx.lineTo(cx, cy - 104 - Math.sin(t * 3) * 6); ctx.lineTo(cx + 16, cy - 84); neonStroke(ctx, 4, B);
   } else if (kind === 'grid') {
     for (let i = -3; i <= 3; i++) for (let j = -2; j <= 2; j++) {
       const p = Math.sin(t * 3 - Math.hypot(i, j)) * 0.5 + 0.5;
       ctx.beginPath(); ctx.rect(cx + i * 26 - 8, cy + j * 26 - 8, 16, 16);
-      ctx.fillStyle = `rgba(255,57,224,${0.15 + p * 0.85})`; ctx.shadowColor = '#ff39e0'; ctx.shadowBlur = p * 18; ctx.fill();
+      ctx.fillStyle = `rgba(57,255,122,${0.15 + p * 0.85})`; ctx.shadowColor = G; ctx.shadowBlur = p * 18; ctx.fill();
     }
   }
   ctx.restore();
@@ -316,7 +335,7 @@ gsap.ticker.add((time) => { if (hoodVisible) arts.forEach((a) => drawArt(a, time
 gsap.from('.card', { y: 60, opacity: 0, stagger: 0.08, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.hood__wrap', start: 'top 85%' } });
 
 /* ---------------- expanding preview ---------------- */
-gsap.fromTo('#previewScreen', { width: '28vw' }, {
+gsap.fromTo('#previewScreen', { width: () => (innerWidth <= 900 ? '78vw' : '30vw') }, {
   width: '100vw', ease: 'power2.inOut',
   scrollTrigger: { trigger: '.preview', start: 'top top', end: 'bottom bottom', scrub: 0.5 },
 });
@@ -336,7 +355,7 @@ $('#partNext').onclick = () => partGo(1);
 gsap.from('.partner__logo', { scale: 0, rotate: -30, stagger: 0.12, duration: 0.9, ease: 'back.out(1.8)', scrollTrigger: { trigger: '.partners', start: 'top 80%' } });
 
 /* ---------------- footer lockup ---------------- */
-gsap.fromTo('.lockup .frog-glyph', { yPercent: 60, rotate: -14 }, { yPercent: 0, rotate: 0, ease: 'none', scrollTrigger: { trigger: '.lockup', start: 'top bottom', end: 'center center', scrub: true } });
+gsap.fromTo('.lockup .mark', { yPercent: 60, rotate: -14 }, { yPercent: 0, rotate: 0, ease: 'none', scrollTrigger: { trigger: '.lockup', start: 'top bottom', end: 'center center', scrub: true } });
 gsap.fromTo('.lockup span', { yPercent: 45 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '.lockup', start: 'top bottom', end: 'center center', scrub: true } });
 gsap.from('.badge', { opacity: 0, y: 16, stagger: 0.08, duration: 0.8, scrollTrigger: { trigger: '.badges', start: 'top 90%' } });
 

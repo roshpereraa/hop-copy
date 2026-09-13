@@ -1,12 +1,13 @@
-# hop-copy — LEAP
+# Glide — concept landing page
 
-A rebranded, animation-faithful recreation of a neon 3D scroll-story landing page.
-All branding (LEAP, frog mascot, Nova Chain, USDX, tickers) and copy are original placeholders.
+An animated, scroll-driven landing page for **Glide**, a (fictional) focus-timer app with a flying frog mascot, Pip.
+All branding, copy and the mascot are original concept placeholders.
 
 - **Vite** + vanilla JS
-- **Three.js** procedural mascot with bloom, scroll-keyframed skydive
-- **GSAP ScrollTrigger** pinned story beats, scramble/typewriter text, glitch mask, expanding preview
+- **Three.js** procedural mascot with bloom and scroll-keyframed flight
+- **GSAP ScrollTrigger** pinned story, scramble/typewriter text, glitch mask, expanding squad preview
 - **Lenis** smooth scrolling
+- Palette: dark navy `#040a1c` / neon green `#39ff7a` · Type: Big Shoulders Display, Familjen Grotesk, Martian Mono
 
 ```bash
 npm install

@@ -3,52 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEAP — Call the price</title>
-  <meta name="description" content="LEAP is a precision forecasting playground. Call the exact price, closest calls earn the most." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23120a24'/><circle cx='22' cy='24' r='10' fill='%23ff2bd6'/><circle cx='42' cy='24' r='10' fill='%23ff2bd6'/><rect x='12' y='30' width='40' height='24' rx='10' fill='white'/></svg>" />
+  <title>Glide — Log off. Lift off.</title>
+  <meta name="description" content="Glide is a focus timer with a flying frog. Stay in the zone and Pip glides further; wander off and Pip lands." />
+  <meta name="theme-color" content="#040a1c" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23040a1c'/><path d='M10 36 54 12 42 50 31 39Z' fill='%2339ff7a'/><path d='M31 39 54 12 26 34Z' fill='%23040a1c' opacity='.55'/></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=Saira:wght@700;800&family=Space+Mono:wght@400;700&family=Tomorrow:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Familjen+Grotesk:wght@400;500;600;700&family=Martian+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/style.css" />
 </head>
 <body>
-  <!-- Preloader -->
-  <div class="loader" id="loader">
-    <div class="loader__logo"><svg class="frog-glyph"><use href="#frog" /></svg><span>LEAP</span></div>
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__logo"><svg class="mark"><use href="#mark" /></svg><span>GLIDE</span></div>
     <div class="loader__bar"><i id="loaderBar"></i></div>
   </div>
 
-  <svg width="0" height="0" style="position:absolute">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
-      <symbol id="frog" viewBox="0 0 64 56">
-        <path fill="currentColor" fill-rule="evenodd" d="M16 0a12 12 0 0 1 11.3 8h9.4A12 12 0 1 1 55.6 19 14 14 0 0 1 64 31.8V42a14 14 0 0 1-14 14H14A14 14 0 0 1 0 42V31.8A14 14 0 0 1 8.4 19 12 12 0 0 1 16 0Zm0 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm32 0a6 6 0 1 0 0 12 6 6 0 0 0 0-12ZM20 38a2.5 2.5 0 0 0-2 4c3.4 4 8.6 6 14 6s10.6-2 14-6a2.5 2.5 0 1 0-4-3c-2.4 2.8-6 4-10 4s-7.6-1.2-10-4a2.5 2.5 0 0 0-2-1Z"/>
+      <!-- Glide mark: folded glider with a trail -->
+      <symbol id="mark" viewBox="0 0 64 48">
+        <path fill="currentColor" d="M20 26 62 2 50 44 38 33Z" />
+        <path fill="currentColor" opacity=".45" d="M38 33 62 2 32 29Z" />
+        <rect fill="currentColor" x="2" y="24" width="14" height="4" rx="2" />
+        <rect fill="currentColor" x="8" y="32" width="16" height="4" rx="2" opacity=".7" />
+        <rect fill="currentColor" x="0" y="40" width="10" height="4" rx="2" opacity=".45" />
       </symbol>
       <symbol id="x" viewBox="0 0 24 24"><path fill="currentColor" d="M17.8 2h3.4l-7.4 8.5L22.5 22h-6.8l-5.3-7-6.1 7H.9l7.9-9.1L.5 2h7l4.8 6.4L17.8 2Zm-1.2 18h1.9L6.5 3.9h-2L16.6 20Z"/></symbol>
     </defs>
   </svg>
 
-  <!-- Fixed 3D stage -->
-  <canvas id="stage"></canvas>
+  <canvas id="stage" aria-hidden="true"></canvas>
   <div class="bg-grid" aria-hidden="true"></div>
   <div class="vignette" aria-hidden="true"></div>
 
-  <!-- Announcement + nav -->
   <header class="top" id="top">
     <div class="announce" id="announce">
-      <a href="#pools">Live precision pools on Nova Chain · settled in USDX · Open the app <span>→</span></a>
-      <button class="announce__close" aria-label="Close" id="announceClose">×</button>
+      <a href="#squads">Squad Sessions are live — focus together, glide further <span>→</span></a>
+      <button class="announce__close" aria-label="Dismiss announcement" id="announceClose">×</button>
     </div>
-    <nav class="nav">
-      <a href="#" class="logo"><svg class="frog-glyph"><use href="#frog" /></svg><span>LEAP</span></a>
-      <div class="nav__links">
-        <a href="#pools" data-scramble>Pools</a>
-        <a href="#board" data-scramble>Leaderboard</a>
+    <nav class="nav" aria-label="Main">
+      <a href="#hero" class="logo" aria-label="Glide home"><svg class="mark"><use href="#mark" /></svg><span>GLIDE</span></a>
+      <div class="nav__links" id="navLinks">
+        <a href="#cockpit" data-scramble>Features</a>
+        <a href="#squads" data-scramble>Squads</a>
         <a href="#how" data-scramble>How it works</a>
-        <a href="#paper" data-scramble>Whitepaper</a>
-        <a href="#" class="nav__x" aria-label="X"><svg><use href="#x" /></svg></a>
-        <a href="#pools" class="btn btn--sm">Open App</a>
+        <a href="#about" data-scramble>About</a>
+        <a href="#" class="nav__x" aria-label="Glide on X"><svg><use href="#x" /></svg></a>
+        <a href="#download" class="btn btn--sm">Get the app</a>
       </div>
-      <button class="nav__burger" aria-label="Menu"><i></i><i></i></button>
+      <button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><i></i><i></i></button>
     </nav>
   </header>
 
@@ -57,16 +60,17 @@
     <section class="hero" id="hero">
       <div class="plus-field" data-plus="14"></div>
       <div class="hero__copy">
+        <p class="eyebrow reveal">Focus timer · iOS · Android · Desktop</p>
         <h1 class="hero__title">
-          <span class="line" data-type>SKIP THE COIN FLIP.</span>
-          <span class="line line--pink" data-type>NAME THE PRICE.</span>
+          <span class="line" data-type>LOG OFF.</span>
+          <span class="line line--accent" data-type>LIFT OFF.</span>
         </h1>
-        <p class="hero__lede reveal">LEAP is a precision market for people who think in numbers. Call where a token, an index or a meme will close, stake USDX, and earn a slice of the pool based on how near you get.</p>
-        <p class="hero__lede reveal">No wrong answers. Just longer distances.</p>
-        <a href="#pools" class="btn btn--glow reveal">Open App</a>
+        <p class="hero__lede reveal">Glide is a focus timer with a flying frog. Start a session, flip your phone face-down, and Pip glides a little further for every minute you stay in the zone.</p>
+        <p class="hero__lede reveal">Wander off to another app and Pip lands. No guilt — just take off again.</p>
+        <a href="#download" class="btn btn--glow reveal">Start gliding</a>
       </div>
-      <div class="hero__scroll">
-        <span>Scroll to see how it works</span>
+      <div class="hero__scroll" aria-hidden="true">
+        <span>Scroll to take off</span>
         <div class="hero__arrows"><i>▼</i><i>▼</i></div>
       </div>
       <div class="marquee" aria-hidden="true">
@@ -75,235 +79,242 @@
     </section>
 
     <!-- PINNED STORY -->
-    <section class="story" id="how">
+    <section class="story" id="how" aria-label="How Glide works">
       <div class="story__pin">
         <div class="streak" id="streak"></div>
         <div class="ghosts" aria-hidden="true">
-          <span class="ghost g1">?!</span><span class="ghost g2">$</span><span class="ghost g3">!!</span><span class="ghost g4">%</span>
+          <span class="ghost g1">zZ</span><span class="ghost g2">25</span><span class="ghost g3">~</span><span class="ghost g4">90</span>
         </div>
 
         <div class="beat" data-beat="0">
-          <div class="beat__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="24" cy="24" r="6"/><path d="M24 6a18 18 0 1 1-17 12"/><path d="M24 12a12 12 0 1 1-11 7"/><path d="M34 4l-4 8 8-2"/></svg></div>
-          <h2 class="beat__title">Call a number.</h2>
-          <p class="beat__sub">Not higher or lower. The actual close.</p>
-          <p class="beat__sig">— LEAP —</p>
+          <div class="beat__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="24" cy="27" r="16"/><path d="M24 27V17M19 4h10M24 4v7M37 12l3-3"/></svg></div>
+          <h2 class="beat__title">Start a session.</h2>
+          <p class="beat__sub">Pick a length. Tap once. That's it.</p>
+          <p class="beat__sig">— GLIDE —</p>
         </div>
 
         <div class="beat" data-beat="1">
           <div class="beat__row">
-            <span class="chip chip--lg"><i class="dot dot--lime"></i>Nova Chain</span><b>·</b>
-            <span class="chip chip--lg"><i class="dot dot--green"></i>USDX</span>
+            <span class="chip chip--lg"><i class="dot dot--green"></i>Phone down</span><b>·</b>
+            <span class="chip chip--lg"><i class="dot dot--lime"></i>Timer up</span>
           </div>
-          <p class="beat__sub">Tokenised assets, live feeds, settled on-chain.</p>
-          <p class="beat__sig">— LEAP —</p>
+          <p class="beat__sub">Flip your phone over and the countdown begins.</p>
+          <p class="beat__sig">— GLIDE —</p>
         </div>
 
         <div class="beat" data-beat="2">
-          <div class="beat__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"><rect x="6" y="14" width="36" height="26" rx="6"/><path d="M12 14l18-8 4 8"/><circle cx="34" cy="27" r="2.5" fill="currentColor"/></svg></div>
+          <div class="beat__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M4 18h26a6 6 0 1 0-6-6M4 26h34a6 6 0 1 1-6 6M4 34h14"/></svg></div>
           <div class="beat__row">
-            <span class="chip chip--lg"><i class="dot dot--white"></i>ORBT</span><b>·</b>
-            <span class="chip chip--lg"><i class="dot dot--green"></i>NOVA</span><b>·</b>
-            <span class="chip chip--lg"><i class="dot dot--red"></i>VOLT</span>
+            <span class="chip chip--lg"><i class="dot dot--white"></i>Read</span><b>·</b>
+            <span class="chip chip--lg"><i class="dot dot--green"></i>Code</span><b>·</b>
+            <span class="chip chip--lg"><i class="dot dot--blue"></i>Draw</span>
           </div>
-          <p class="beat__sub">Put USDX behind the figure you trust.</p>
-          <p class="beat__sig">— LEAP —</p>
+          <p class="beat__sub">Any task counts, as long as you stay on it.</p>
+          <p class="beat__sig">— GLIDE —</p>
         </div>
 
         <div class="beat" data-beat="3">
           <div class="beat__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8v32h32"/><path d="M14 32c6-2 10-8 14-16"/><path d="M22 14l6 2 2-6"/></svg></div>
-          <h2 class="beat__title">Nearer earns more.</h2>
-          <p class="beat__sub">precision × timing × nerve</p>
-          <p class="beat__sig">— LEAP —</p>
+          <h2 class="beat__title">Stay longer, fly further.</h2>
+          <p class="beat__sub">minutes × streak × calm</p>
+          <p class="beat__sig">— GLIDE —</p>
         </div>
 
         <div class="beat" data-beat="4">
-          <div class="beat__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6h20v10a10 10 0 0 1-20 0V6Z"/><path d="M14 10H7v3a7 7 0 0 0 7 7M34 10h7v3a7 7 0 0 1-7 7M24 26v8M16 42h16l-2-8H18l-2 8Z"/></svg></div>
-          <h2 class="beat__title">Everyone places.</h2>
-          <p class="beat__sub">Each call earns part of the pool.</p>
-          <p class="beat__sig">— LEAP —</p>
+          <div class="beat__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="16" r="6"/><circle cx="33" cy="18" r="5"/><path d="M5 40c1-8 6-12 12-12s11 4 12 12M29 29c7-1 13 3 14 11"/></svg></div>
+          <h2 class="beat__title">Glide together.</h2>
+          <p class="beat__sub">Friends in the same session lift each other up.</p>
+          <p class="beat__sig">— GLIDE —</p>
         </div>
 
         <div class="caption caption--left" data-beat="5">
-          <div class="caption__chips"><span class="chip"><i class="dot dot--lime"></i>Nova Chain</span><span class="chip"><i class="dot dot--green"></i>USDX</span></div>
-          <p data-type>RUNS ON NOVA CHAIN. A FAST L2 WITH SUB-SECOND BLOCKS AND FEES UNDER A CENT.</p>
+          <div class="caption__chips"><span class="chip"><i class="dot dot--green"></i>Focus Shield</span><span class="chip"><i class="dot dot--blue"></i>Mute</span></div>
+          <p data-type>FOCUS SHIELD HOLDS YOUR NOTIFICATIONS UNTIL YOU LAND. NOTHING SNEAKS THROUGH.</p>
         </div>
         <div class="caption caption--right" data-beat="6">
-          <div class="caption__chips"><span class="chip"><i class="dot dot--white"></i>ORBT</span><span class="chip"><i class="dot dot--green"></i>NOVA</span><span class="chip"><i class="dot dot--red"></i>VOLT</span><span class="chip"><i class="dot dot--blue"></i>DRFT</span></div>
-          <p data-type>MANY MARKETS, ONE FIGURE. TOKENS, INDICES AND MEMES, PRICED LIVE.</p>
+          <div class="caption__chips"><span class="chip"><i class="dot dot--white"></i>Day</span><span class="chip"><i class="dot dot--green"></i>Week</span><span class="chip"><i class="dot dot--lime"></i>All-time</span></div>
+          <p data-type>DAILY, WEEKLY AND ALL-TIME DISTANCE. WATCH YOUR FLIGHT PATH GROW.</p>
         </div>
         <div class="caption caption--left caption--low" data-beat="7">
-          <div class="caption__chips"><span class="chip"><i class="dot dot--green"></i>USDX</span><span class="chip"><i class="dot dot--lime"></i>Nova Chain</span></div>
-          <p data-type>PAID OUT IN USDX. WINNINGS GO DIRECTLY TO YOUR WALLET.</p>
+          <div class="caption__chips"><span class="chip"><i class="dot dot--lime"></i>On-device</span><span class="chip"><i class="dot dot--white"></i>No ads</span></div>
+          <p data-type>YOUR SESSIONS STAY ON YOUR DEVICE. NO ADS, NO TRACKERS, NOTHING SOLD.</p>
         </div>
         <div class="hexdump" aria-hidden="true" id="hexdump"></div>
       </div>
     </section>
 
-    <!-- INTRO / GLITCH MASK -->
+    <!-- INTRO -->
     <section class="intro">
       <div class="plus-field" data-plus="16"></div>
       <div class="intro__band">
-        <h2 class="scramble-title" data-scramble-in>LEAP IS A <em>PRECISION MARKET</em></h2>
-        <p class="body-copy reveal">Most forecasting apps want a yes or a no. LEAP wants a figure. Every call in a pool gets scored on its distance from the close, how early it arrived and how long it held; your cut is that score multiplied by your stake. Nobody loses outright. Some calls just land further away.</p>
+        <h2 class="scramble-title" data-scramble-in>GLIDE IS A <em>FOCUS GAME</em></h2>
+        <p class="body-copy reveal">Most productivity apps nag you with lists. Glide gives your attention somewhere to go. Every focused minute adds distance to Pip's flight; switch to a feed and Pip drifts down to land. It is gentle on purpose — the goal is a better habit, not a guilt trip.</p>
       </div>
     </section>
 
-    <section class="mask-sec" id="pools">
+    <!-- MODES / GLITCH MASK -->
+    <section class="mask-sec" id="modes">
       <div class="mask-sec__inner">
-        <div class="mask" id="mask">
+        <div class="mask" id="mask" aria-hidden="true">
           <div class="mask__shards" id="shards"></div>
           <svg class="mask__face" viewBox="0 0 240 240" fill="none">
             <defs>
               <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
             </defs>
-            <g filter="url(#glow)" stroke="#ff39e0" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+            <g filter="url(#glow)" stroke="#39ff7a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="78" cy="72" r="34"/><circle cx="162" cy="72" r="34"/>
               <path d="M44 100c-14 14-20 34-18 56 4 38 42 58 94 58s90-20 94-58c2-22-4-42-18-56"/>
-              <path d="M66 62l24 20M90 62L66 82M150 62l24 20M174 62l-24 20" stroke="#fff"/>
-              <path d="M84 168c10 12 22 16 36 16s26-4 36-16"/>
-              <path d="M40 132l-20 4M200 132l20 4" stroke-width="3"/>
+              <path d="M62 72h32M146 72h32" stroke="#eaf3ff"/>
+              <path d="M96 170c8 6 16 8 24 8s16-2 24-8"/>
+              <path d="M30 118c-10-20-8-44 6-60M210 118c10-20 8-44-6-60" stroke="#4d8dff" stroke-width="4"/>
+              <rect x="14" y="112" width="26" height="40" rx="10" stroke="#4d8dff"/><rect x="200" y="112" width="26" height="40" rx="10" stroke="#4d8dff"/>
             </g>
           </svg>
         </div>
         <div class="mask-sec__copy">
-          <h2 class="scramble-title scramble-title--left" data-scramble-in>PICK A POOL</h2>
-          <p class="body-copy body-copy--left reveal">Every pool is a single asset and a single close time. Scroll through what's running — tokens, indices and chain memes — see the pot, the entry count and the countdown, then drop your figure before it locks.</p>
+          <h2 class="scramble-title scramble-title--left" data-scramble-in>PICK YOUR MODE</h2>
+          <p class="body-copy body-copy--left reveal">Sprint for 25 minutes, go deep for 90, or plan a custom flight. Each mode has its own soundtrack, break rhythm and landing animation, so switching gears feels like changing altitude.</p>
           <div class="chips-row reveal">
-            <span class="chip chip--pill"><i class="dot dot--lime"></i>Nova Chain</span>
-            <span class="chip"><i class="dot dot--white"></i>ORBT</span>
-            <span class="chip"><i class="dot dot--green"></i>NOVA</span>
-            <span class="chip"><i class="dot dot--red"></i>VOLT</span>
+            <span class="chip chip--pill"><i class="dot dot--green"></i>Sprint · 25</span>
+            <span class="chip"><i class="dot dot--blue"></i>Deep · 90</span>
+            <span class="chip"><i class="dot dot--white"></i>Custom</span>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- AMBIENCE -->
     <section class="post">
       <div class="plus-field" data-plus="14"></div>
       <div class="post__inner">
         <div class="post__copy">
-          <h2 class="scramble-title scramble-title--left" data-scramble-in>POST YOUR FIGURE</h2>
-          <p class="body-copy body-copy--left reveal">Enter the price you expect and stake from 0.50 USDX. Early calls pick up a timing multiplier, and every change after the first costs a little conviction — so decide, then hold.</p>
-          <div class="chips-row reveal"><span class="chip chip--pill"><i class="dot dot--green"></i>USDX</span><span class="chip"><i class="dot dot--lime"></i>Nova Chain</span></div>
+          <h2 class="scramble-title scramble-title--left" data-scramble-in>SET THE MOOD</h2>
+          <p class="body-copy body-copy--left reveal">Rain on a tin roof, a quiet library, a night train. Layer up to three ambient sounds, save the blend, and Glide plays it back the next time you take off.</p>
+          <div class="chips-row reveal"><span class="chip chip--pill"><i class="dot dot--blue"></i>Rain</span><span class="chip"><i class="dot dot--lime"></i>Library</span><span class="chip"><i class="dot dot--white"></i>Night train</span></div>
         </div>
-        <div class="bot" id="bot" aria-hidden="true">
-          <div class="bot__ears"><i></i><i></i></div>
-          <div class="bot__cube">
-            <div class="bot__face"><b></b><b></b><span></span></div>
+        <div class="radio" id="radio" aria-hidden="true">
+          <div class="radio__antenna"></div>
+          <div class="radio__body">
+            <div class="radio__screen"><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
+            <div class="radio__knobs"><i></i><i></i></div>
           </div>
-          <div class="bot__cord"></div>
         </div>
       </div>
-      <div class="cloud" aria-hidden="true"></div>
+      <div class="wave-blob" aria-hidden="true"></div>
     </section>
 
-    <!-- UNDER THE HOOD -->
-    <section class="hood" id="board">
+    <!-- FEATURES -->
+    <section class="hood" id="cockpit">
       <div class="plus-side plus-side--l"></div><div class="plus-side plus-side--r"></div>
-      <h2 class="scramble-title" data-scramble-in>WHAT'S UNDER THE <em>HOOD</em></h2>
-      <p class="body-copy reveal">Eight ideas that make LEAP play differently: wallet-only access, a timing multiplier for early calls, distance scoring instead of yes/no, one visible house fee, live price feeds, USDX settlement on Nova Chain and a public leaderboard for accuracy.</p>
+      <h2 class="scramble-title" data-scramble-in>WHAT'S IN THE <em>COCKPIT</em></h2>
+      <p class="body-copy reveal">Eight pieces that keep Glide simple on the surface and smart underneath — from the timer itself to the weekly log that shows where your attention actually went.</p>
       <div class="hood__wrap">
-        <button class="arrow arrow--l" id="hoodPrev" aria-label="Previous">←</button>
+        <button class="arrow arrow--l" id="hoodPrev" aria-label="Previous features">←</button>
         <div class="hood__viewport">
           <div class="hood__track" id="hoodTrack"></div>
         </div>
-        <button class="arrow arrow--r" id="hoodNext" aria-label="Next">→</button>
+        <button class="arrow arrow--r" id="hoodNext" aria-label="Next features">→</button>
       </div>
-      <div class="hood__progress"><span id="hoodCount">[1/8]</span><div class="hood__bar"><i id="hoodBar"></i></div></div>
+      <div class="hood__progress"><span id="hoodCount">[1/6]</span><div class="hood__bar"><i id="hoodBar"></i></div></div>
     </section>
 
-    <!-- EXPANDING PREVIEW -->
-    <section class="preview" id="paper">
+    <!-- SQUADS PREVIEW -->
+    <section class="preview" id="squads">
       <div class="preview__stick">
         <div class="preview__grid"><i></i><i></i><i></i></div>
+        <div class="preview__label" aria-hidden="true">SQUAD SESSIONS</div>
         <div class="preview__screen" id="previewScreen">
-          <div class="preview__logo"><svg class="frog-glyph"><use href="#frog" /></svg>LEAP</div>
-          <div class="preview__tag">Skip the coin flip. <em>Name the price.</em></div>
-          <div class="preview__btn">Open App</div>
+          <div class="preview__logo"><svg class="mark"><use href="#mark" /></svg>GLIDE</div>
+          <div class="preview__tag">Focus alone. <em>Fly together.</em></div>
+          <div class="preview__btn">Invite your squad</div>
           <div class="preview__device">
             <div class="preview__dhead"><span></span><span></span><span></span></div>
-            <div class="preview__dbody"><b>SKIP THE COIN FLIP.</b><b class="pink">NAME THE PRICE.</b><i></i><i></i><i class="short"></i></div>
+            <div class="preview__dbody">
+              <b class="timer">24:59</b>
+              <div class="squad"><i>AM</i><i>JO</i><i>RK</i><i class="plus1">+2</i></div>
+              <i class="bar"></i><i class="bar short"></i>
+            </div>
           </div>
-          <div class="coin c1">◉</div><div class="coin c2">◉</div><div class="coin c3">◉</div><div class="coin c4">◉</div>
+          <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="orb o4"></div>
         </div>
       </div>
     </section>
 
-    <!-- WHO WE ARE -->
-    <section class="about">
+    <!-- ABOUT -->
+    <section class="about" id="about">
       <div class="plus-side plus-side--l"></div><div class="plus-side plus-side--r"></div>
       <div class="about__block">
-        <h2 class="scramble-title" data-scramble-in>WHO WE ARE —<br /><em>ON-CHAIN, IN THE OPEN</em></h2>
-        <p class="body-copy reveal">We kept calling the move and missing the magnitude, and every app we tried only cared about the move. So we made one that cares about the magnitude. LEAP runs on Nova Chain, publishes its scoring, and pays out USDX with ordinary transfers anyone can check.</p>
+        <h2 class="scramble-title" data-scramble-in>WHO WE ARE —<br /><em>A TEAM THAT GOT DISTRACTED</em></h2>
+        <p class="body-copy reveal">We are four people who kept opening a timer app and closing it thirty seconds later. Streak counters felt like homework and blockers felt like punishment, so we built something that rewards staying put instead. Pip started as a doodle on a sticky note.</p>
       </div>
       <div class="about__block">
-        <h2 class="scramble-title" data-scramble-in>OUR MISSION: <em>REWARD PRECISION</em></h2>
-        <p class="body-copy reveal">A forecast should be a figure, not a guess at a direction. LEAP pays the players who are nearest, earliest and most steady — and puts the proof on a leaderboard for everyone to see.</p>
+        <h2 class="scramble-title" data-scramble-in>OUR MISSION: <em>MAKE FOCUS FEEL LIGHT</em></h2>
+        <p class="body-copy reveal">Attention is the most valuable thing you spend each day. Glide makes protecting it feel less like willpower and more like play — and keeps every minute of your data on your own device.</p>
       </div>
     </section>
 
-    <!-- PARTNERS -->
-    <section class="partners">
-      <button class="arrow arrow--l" id="partPrev" aria-label="Previous">←</button>
-      <div class="partners__track" id="partTrack">
-        <article class="partner">
-          <h4>[Nova Chain]</h4>
-          <div class="partner__logo partner__logo--lime"><svg viewBox="0 0 64 64"><path d="M44 10c-14 2-26 14-28 30l-4 14 10-8c14-2 26-14 28-30 1-2-4-7-6-6ZM22 44l14-14" fill="none" stroke="#141414" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <p>The L2 where pools live. Stakes, scoring and payouts all clear here — quick blocks, tiny fees, live tokenised assets.</p>
-        </article>
-        <article class="partner">
-          <h4>[USDX]</h4>
-          <div class="partner__logo partner__logo--coin brackets"><span>$</span></div>
-          <p>The unit behind every pool. You stake in USDX, the pot is held in USDX, and winnings arrive as USDX in your wallet.</p>
-        </article>
-        <article class="partner">
-          <h4>[Your Wallet]</h4>
-          <div class="partner__logo brackets"><svg class="frog-glyph big"><use href="#frog" /></svg></div>
-          <p>Connect the wallet you already use. Stakes sit in the pool contract only until close, then payouts go straight back.</p>
-        </article>
-        <article class="partner">
-          <h4>[Live Feeds]</h4>
-          <div class="partner__logo brackets"><svg viewBox="0 0 64 64" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 44l14-14 10 10 20-22"/><path d="M40 16h12v12"/></svg></div>
-          <p>Prices stream from independent oracles and every close is written on-chain, so the final figure is never up for debate.</p>
-        </article>
+    <!-- PLATFORMS -->
+    <section class="partners" id="download" aria-label="Platforms">
+      <button class="arrow arrow--l" id="partPrev" aria-label="Previous platform">←</button>
+      <div class="partners__viewport">
+        <div class="partners__track" id="partTrack">
+          <article class="partner">
+            <h3>[Phone]</h3>
+            <div class="partner__logo brackets"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><rect x="18" y="6" width="28" height="52" rx="6"/><path d="M28 50h8"/></svg></div>
+            <p>Flip-to-focus, lock-screen timer and a home-screen widget that shows how far Pip flew today.</p>
+          </article>
+          <article class="partner">
+            <h3>[Desktop]</h3>
+            <div class="partner__logo brackets"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="10" width="52" height="34" rx="4"/><path d="M24 54h16M32 44v10"/></svg></div>
+            <p>A menu-bar timer that quietly hides distracting sites and apps for exactly as long as you choose.</p>
+          </article>
+          <article class="partner">
+            <h3>[Watch]</h3>
+            <div class="partner__logo brackets"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><rect x="16" y="16" width="32" height="32" rx="9"/><path d="M24 16l2-10h12l2 10M24 48l2 10h12l2-10M32 26v7l4 3"/></svg></div>
+            <p>A soft tap on your wrist when a session starts, when a break ends and when your squad takes off.</p>
+          </article>
+          <article class="partner">
+            <h3>[Browser]</h3>
+            <div class="partner__logo brackets"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><circle cx="32" cy="32" r="24"/><path d="M8 32h48M32 8c8 8 8 40 0 48M32 8c-8 8-8 40 0 48"/></svg></div>
+            <p>An extension that syncs with your running session and swaps endless feeds for a calm landing page.</p>
+          </article>
+        </div>
       </div>
-      <button class="arrow arrow--r" id="partNext" aria-label="Next">→</button>
+      <button class="arrow arrow--r" id="partNext" aria-label="Next platform">→</button>
     </section>
 
-    <!-- FOOTER -->
     <footer class="footer">
       <div class="footer__grid">
         <div class="footer__col footer__col--brand">
-          <h5>LEAP</h5>
-          <p class="footer__blurb reveal">A forecasting market that asks for a figure, not a side. Choose a pool, enter the price you expect, stake USDX. When it closes, the pot is divided by score × stake — nobody is simply wrong, some are just further off. Everything settles in USDX on Nova Chain, right back to your wallet.</p>
+          <h2 class="footer__h">GLIDE</h2>
+          <p class="footer__blurb reveal">A focus timer with a flying frog. Choose a mode, put your phone down and let Pip glide while you work. Invite friends to fly in formation, look back on a weekly flight log, and keep all of it private on your own device.</p>
           <div class="badges">
-            <div class="badge badge--big"><svg class="frog-glyph pinkglyph"><use href="#frog" /></svg><span>Settled in <b>USDX</b> on Nova Chain</span></div>
-            <div class="badge"><i class="tick">◆</i><span>Scoring is <b>public</b>: precision × timing × nerve</span></div>
-            <div class="badge"><i class="tick">✓</i><span>Connect with <b>your wallet</b>, payouts return to it</span></div>
-            <div class="badge"><i class="tick">✓</i><span>House fee <b>3 %</b>, nothing hidden</span></div>
-            <div class="badge"><i class="tick">✳</i><span><b>Built</b> for Nova Chain</span></div>
+            <div class="badge badge--big"><svg class="mark mark--accent"><use href="#mark" /></svg><span>Free to start, <b>Glide+</b> for squads</span></div>
+            <div class="badge"><i class="tick">◆</i><span><b>Private</b> by design, stored on-device</span></div>
+            <div class="badge"><i class="tick">✓</i><span><b>No ads</b>, now or ever</span></div>
+            <div class="badge"><i class="tick">✓</i><span>Works <b>offline</b></span></div>
+            <div class="badge"><i class="tick">✳</i><span><b>Accessible</b> colour and motion options</span></div>
           </div>
-          <div class="footer__social"><svg class="frog-glyph"><use href="#frog" /></svg><svg class="xi"><use href="#x" /></svg><span>Everything happens in the app</span></div>
+          <div class="footer__social"><svg class="mark"><use href="#mark" /></svg><svg class="xi"><use href="#x" /></svg><span>See you in the air</span></div>
         </div>
         <div class="footer__col">
-          <h5>Features</h5>
-          <ul><li><a data-scramble href="#board">What's under the hood</a></li><li><a data-scramble href="#how">How it works</a></li><li><a data-scramble href="#pools">Live pools</a></li><li><a data-scramble href="#board">Leaderboard</a></li></ul>
+          <h2 class="footer__h">Features</h2>
+          <ul><li><a data-scramble href="#cockpit">The cockpit</a></li><li><a data-scramble href="#how">How it works</a></li><li><a data-scramble href="#modes">Focus modes</a></li><li><a data-scramble href="#squads">Squad sessions</a></li></ul>
         </div>
         <div class="footer__col">
-          <h5>The App</h5>
-          <ul><li><a data-scramble href="#pools">Open app</a></li><li><a data-scramble href="#paper">Whitepaper</a></li></ul>
-          <div class="chips-row"><span class="chip"><i class="dot dot--green"></i>USDX</span><span class="chip"><i class="dot dot--lime"></i>Nova Chain</span></div>
+          <h2 class="footer__h">Get Glide</h2>
+          <ul><li><a data-scramble href="#download">iPhone &amp; iPad</a></li><li><a data-scramble href="#download">Android</a></li><li><a data-scramble href="#download">Mac &amp; Windows</a></li><li><a data-scramble href="#download">Browser extension</a></li></ul>
         </div>
-        <div class="footer__legal"><span>© 2026 LEAP Markets (demo)</span><a href="#">Privacy</a><a href="#">Cookies</a><a href="#">Terms</a><a href="#how">How it works</a></div>
+        <div class="footer__legal"><span>© 2026 Glide Labs (concept demo)</span><a href="#">Privacy</a><a href="#">Cookies</a><a href="#">Terms</a><a href="#about">About</a></div>
       </div>
-      <div class="lockup" id="lockup">
-        <svg class="frog-glyph"><use href="#frog" /></svg>
-        <span>LEAP</span>
+      <div class="lockup" id="lockup" aria-hidden="true">
+        <svg class="mark"><use href="#mark" /></svg>
+        <span>GLIDE</span>
       </div>
     </footer>
   </main>
 
-  <button class="chat" aria-label="Chat"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 3C6.5 3 2 6.6 2 11c0 2.2 1.1 4.2 3 5.6V21l4-2.3c1 .2 2 .3 3 .3 5.5 0 10-3.6 10-8s-4.5-8-10-8Zm-4 9.3a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Z"/></svg></button>
+  <button class="chat" aria-label="Open help chat"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 3C6.5 3 2 6.6 2 11c0 2.2 1.1 4.2 3 5.6V21l4-2.3c1 .2 2 .3 3 .3 5.5 0 10-3.6 10-8s-4.5-8-10-8Zm-4 9.3a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Z"/></svg></button>
 
   <script type="module" src="/src/main.js"></script>
 </body>

@@ -8,14 +8,14 @@ import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 // pos / rot (radians) / scale / streak opacity / canvas opacity
 const KEYS = [
   { p: 0.00, pos: [2.1, -1.2, 0], rot: [0.05, -0.75, 0.12], s: 1.25, streak: 0, o: 1 },
-  { p: 0.10, pos: [0.3, 0.5, -1], rot: [0.9, -0.2, 0.1], s: 1.0, streak: 0.4, o: 1 },  // beat 0 – diving at camera
-  { p: 0.22, pos: [1.2, 0.3, -0.5], rot: [0.5, 0.9, -1.2], s: 1.05, streak: 0.7, o: 1 },   // beat 1 – side glide
-  { p: 0.34, pos: [0.6, -0.4, 0], rot: [-0.3, 0.3, -1.5], s: 1.2, streak: 0.9, o: 1 }, // beat 2 – close fly-by
-  { p: 0.46, pos: [-0.6, 0.2, -0.5], rot: [0.4, -0.9, 1.35], s: 1.05, streak: 1, o: 1 },    // beat 3
-  { p: 0.58, pos: [-0.9, 0.5, -0.5], rot: [0.2, 0.4, -1.4], s: 1.0, streak: 0.8, o: 1 },   // beat 4
-  { p: 0.70, pos: [0.3, 0.3, -1], rot: [0.3, 0.5, -1.55], s: 0.9, streak: 0.5, o: 1 },  // caption L
-  { p: 0.80, pos: [-0.9, 0.3, -1.5], rot: [0.2, -0.4, 1.5], s: 0.8, streak: 0.3, o: 1 },// caption R
-  { p: 0.90, pos: [0.9, 0.9, -2], rot: [0.1, 0.6, -1.5], s: 0.6, streak: 0.1, o: 1 },   // caption L low
+  { p: 0.10, pos: [0.2, 2.1, -1.5], rot: [0.9, -0.2, 0.1], s: 0.85, streak: 0.4, o: 1 },    // beat 0 – above the headline
+  { p: 0.22, pos: [3.1, 0.2, -0.5], rot: [0.5, 0.9, -1.2], s: 0.95, streak: 0.7, o: 1 },    // beat 1 – right side glide
+  { p: 0.34, pos: [-3.1, -0.6, 0], rot: [-0.3, 0.3, -1.5], s: 1.0, streak: 0.9, o: 1 },     // beat 2 – left fly-by
+  { p: 0.46, pos: [2.9, 1.4, -0.5], rot: [0.4, -0.9, 1.35], s: 0.9, streak: 1, o: 1 },      // beat 3
+  { p: 0.58, pos: [-3.0, 1.2, -0.5], rot: [0.2, 0.4, -1.4], s: 0.9, streak: 0.8, o: 1 },    // beat 4
+  { p: 0.70, pos: [1.6, 0.2, -1], rot: [0.3, 0.5, -1.55], s: 0.85, streak: 0.5, o: 1 },     // caption L → mascot right
+  { p: 0.80, pos: [-1.8, 0.3, -1.5], rot: [0.2, -0.4, 1.5], s: 0.8, streak: 0.3, o: 1 },    // caption R → mascot left
+  { p: 0.90, pos: [2.0, 0.9, -2], rot: [0.1, 0.6, -1.5], s: 0.6, streak: 0.1, o: 1 },       // caption L low
   { p: 1.00, pos: [-4.5, 2.8, -3], rot: [0.4, 0.2, -1.2], s: 0.45, streak: 0, o: 0 },
 ];
 
@@ -34,22 +34,22 @@ export function createMascot(canvas) {
   camera.position.set(0, 0, 10);
 
   // ---------- lighting ----------
-  scene.add(new THREE.HemisphereLight(0x8a6bff, 0x12051f, 0.9));
-  const key = new THREE.DirectionalLight(0xb9a3ff, 2.2); key.position.set(-4, 5, 6); scene.add(key);
-  const rim = new THREE.PointLight(0xff2bd6, 80, 30); rim.position.set(4, 2, -3); scene.add(rim);
-  const rim2 = new THREE.PointLight(0x6d3cff, 60, 30); rim2.position.set(-5, -2, -2); scene.add(rim2);
-  const front = new THREE.PointLight(0xff5fe0, 18, 14); front.position.set(1, -1, 5); scene.add(front);
+  scene.add(new THREE.HemisphereLight(0x6f9bff, 0x020818, 0.9));
+  const key = new THREE.DirectionalLight(0xb3ccff, 2.2); key.position.set(-4, 5, 6); scene.add(key);
+  const rim = new THREE.PointLight(0x39ff7a, 38, 30); rim.position.set(4, 2, -3); scene.add(rim);
+  const rim2 = new THREE.PointLight(0x2f6bff, 70, 30); rim2.position.set(-5, -2, -2); scene.add(rim2);
+  const front = new THREE.PointLight(0x8dffb4, 14, 14); front.position.set(1, -1, 5); scene.add(front);
 
   // ---------- materials ----------
-  const skin = new THREE.MeshPhysicalMaterial({ color: 0xb58cff, roughness: 0.42, sheen: 1, sheenColor: 0xff9cf0, clearcoat: 0.3 });
-  const skinDark = new THREE.MeshStandardMaterial({ color: 0x7e56d8, roughness: 0.5 });
-  const jacket = new THREE.MeshStandardMaterial({ color: 0x2b1946, roughness: 0.78, metalness: 0.05 });
-  const jacketHi = new THREE.MeshStandardMaterial({ color: 0x3d2566, roughness: 0.7 });
-  const metal = new THREE.MeshStandardMaterial({ color: 0x1b1424, roughness: 0.28, metalness: 0.85 });
-  const neon = new THREE.MeshStandardMaterial({ color: 0xff2bd6, emissive: 0xff1fcf, emissiveIntensity: 1.9, roughness: 0.4 });
-  const lens = new THREE.MeshStandardMaterial({ color: 0x220011, emissive: 0xff2b7a, emissiveIntensity: 2.4, roughness: 0.1, metalness: 0.2 });
-  const white = new THREE.MeshStandardMaterial({ color: 0xf0e8ff, roughness: 0.55 });
-  const sole = new THREE.MeshStandardMaterial({ color: 0xff3fe0, emissive: 0xff2bd6, emissiveIntensity: 1.6, roughness: 0.5 });
+  const skin = new THREE.MeshPhysicalMaterial({ color: 0x3fbf72, roughness: 0.45, sheen: 1, sheenColor: 0xc8ffd9, clearcoat: 0.3 });
+  const skinDark = new THREE.MeshStandardMaterial({ color: 0x2f9a5e, roughness: 0.5 });
+  const jacket = new THREE.MeshStandardMaterial({ color: 0x0e2458, roughness: 0.78, metalness: 0.05 });
+  const jacketHi = new THREE.MeshStandardMaterial({ color: 0x173a85, roughness: 0.7 });
+  const metal = new THREE.MeshStandardMaterial({ color: 0x0c1428, roughness: 0.28, metalness: 0.85 });
+  const neon = new THREE.MeshStandardMaterial({ color: 0x39ff7a, emissive: 0x2cff6e, emissiveIntensity: 1.15, roughness: 0.4 });
+  const lens = new THREE.MeshStandardMaterial({ color: 0x001a0a, emissive: 0x7dff3c, emissiveIntensity: 1.6, roughness: 0.1, metalness: 0.2 });
+  const white = new THREE.MeshStandardMaterial({ color: 0xe8f0ff, roughness: 0.55 });
+  const sole = new THREE.MeshStandardMaterial({ color: 0x4dff8a, emissive: 0x39ff7a, emissiveIntensity: 0.9, roughness: 0.5 });
 
   const mesh = (geo, mat, parent, p = [0, 0, 0], r = [0, 0, 0], s = [1, 1, 1]) => {
     const m = new THREE.Mesh(geo, mat);
@@ -77,7 +77,7 @@ export function createMascot(canvas) {
     mesh(new THREE.SphereGeometry(0.44, 32, 24), skin, eg);
     mesh(new THREE.TorusGeometry(0.34, 0.1, 16, 40), metal, eg, [0, 0.02, 0.36], [0, 0, 0]);
     mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.06, 40), lens, eg, [0, 0.02, 0.4], [Math.PI / 2, 0, 0]);
-    const pupil = mesh(new THREE.CircleGeometry(0.11, 24), new THREE.MeshBasicMaterial({ color: 0xffe0f6 }), eg, [side * 0.05, 0.05, 0.44]);
+    const pupil = mesh(new THREE.CircleGeometry(0.11, 24), new THREE.MeshBasicMaterial({ color: 0xefffe0 }), eg, [side * 0.05, 0.05, 0.44]);
     eyes.push(pupil);
     // little antenna/fin on goggles
     mesh(new THREE.BoxGeometry(0.08, 0.32, 0.08), neon, eg, [side * 0.34, 0.26, 0.12], [0, 0, -side * 0.5]);
@@ -135,13 +135,13 @@ export function createMascot(canvas) {
   const N = 420, pts = new Float32Array(N * 3);
   for (let i = 0; i < N; i++) { pts[i * 3] = (Math.random() - 0.5) * 30; pts[i * 3 + 1] = (Math.random() - 0.5) * 20; pts[i * 3 + 2] = -Math.random() * 20 + 4; }
   dustGeo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
-  const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({ color: 0xd7c7ff, size: 0.035, transparent: true, opacity: 0.55, depthWrite: false }));
+  const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({ color: 0xbfd6ff, size: 0.035, transparent: true, opacity: 0.55, depthWrite: false }));
   scene.add(dust);
 
   // ---------- post ----------
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.55, 0.4, 0.82);
+  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.38, 0.35, 0.88);
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
 
@@ -150,6 +150,7 @@ export function createMascot(canvas) {
   const mouse = { x: 0, y: 0, sx: 0, sy: 0 };
   let current = { pos: [...KEYS[0].pos], rot: [...KEYS[0].rot], s: KEYS[0].s, streak: 0, o: 1 };
   let visible = true;
+  let narrow = false;
 
   function sample(p) {
     p = Math.min(1, Math.max(0, p));
@@ -171,7 +172,8 @@ export function createMascot(canvas) {
     bloom.resolution.set(w, h);
     camera.aspect = w / h;
     // keep the character framed on narrow screens
-    camera.position.z = w < 900 ? 15 : 10;
+    narrow = w < 900;
+    camera.position.z = narrow ? 15 : 10;
     camera.updateProjectionMatrix();
   }
   resize();
@@ -184,6 +186,12 @@ export function createMascot(canvas) {
     const t = clock.elapsedTime;
     smooth += (progress - smooth) * 0.085;
     const k = sample(smooth);
+    if (narrow) {
+      // phones: keep Pip in the top band, above the copy, and compress sideways motion
+      const heroMix = Math.max(0, 1 - smooth / 0.1);
+      k.pos = [k.pos[0] * 0.35 + heroMix * 0.4, k.pos[1] + heroMix * 3.6 + (1 - heroMix) * 1.2, k.pos[2]];
+      k.s *= 0.85;
+    }
     current = k;
     mouse.sx += (mouse.x - mouse.sx) * 0.05; mouse.sy += (mouse.y - mouse.sy) * 0.05;
 
@@ -205,7 +213,7 @@ export function createMascot(canvas) {
     });
     head.rotation.z = Math.sin(t * 1.7) * 0.03;
     eyes.forEach((e, i) => { e.scale.y = (Math.sin(t * 0.8 + 1.2) > 0.985) ? 0.1 : 1; });
-    lens.emissiveIntensity = 2.2 + Math.sin(t * 3) * 0.4;
+    lens.emissiveIntensity = 1.5 + Math.sin(t * 3) * 0.3;
     rim.position.x = 4 + Math.sin(t * 0.6) * 1.5;
 
     // dust streams upward as we fall
