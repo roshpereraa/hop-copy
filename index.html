@@ -48,8 +48,8 @@
         <a href="#squads" data-scramble>Squads</a>
         <a href="#how" data-scramble>How it works</a>
         <a href="#about" data-scramble>About</a>
-        <a href="#" class="nav__x" aria-label="Leap Gate on X"><svg><use href="#x" /></svg></a>
-        <a href="#download" class="btn btn--sm">Get the app</a>
+        <a href="https://x.com" target="_blank" rel="noopener" class="nav__x" aria-label="Leap Gate on X (opens in a new tab)"><svg><use href="#x" /></svg></a>
+        <a href="/app/#/signup" class="btn btn--sm">Get the app</a>
       </div>
       <button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><i></i><i></i></button>
     </nav>
@@ -67,7 +67,7 @@
         </h1>
         <p class="hero__lede reveal">Leap Gate is a focus timer with a flying frog. Start a session, flip your phone face-down, and Pip glides a little further for every minute you stay in the zone.</p>
         <p class="hero__lede reveal">Wander off to another app and Pip lands. No guilt — just take off again.</p>
-        <a href="#download" class="btn btn--glow reveal">Start gliding</a>
+        <a href="/app/#/signup?next=%2Ftimer%3Fautostart%3D1" class="btn btn--glow reveal">Start gliding</a>
       </div>
       <div class="hero__scroll" aria-hidden="true">
         <span>Scroll to take off</span>
@@ -175,9 +175,9 @@
           <h2 class="scramble-title scramble-title--left" data-scramble-in>PICK YOUR MODE</h2>
           <p class="body-copy body-copy--left reveal">Sprint for 25 minutes, go deep for 90, or plan a custom flight. Each mode has its own soundtrack, break rhythm and landing animation, so switching gears feels like changing altitude.</p>
           <div class="chips-row reveal">
-            <span class="chip chip--pill"><i class="dot dot--green"></i>Sprint · 25</span>
-            <span class="chip"><i class="dot dot--blue"></i>Deep · 90</span>
-            <span class="chip"><i class="dot dot--white"></i>Custom</span>
+            <a class="chip chip--pill" href="/app/#/timer?mode=sprint"><i class="dot dot--green"></i>Sprint · 25</a>
+            <a class="chip" href="/app/#/timer?mode=deep"><i class="dot dot--blue"></i>Deep · 90</a>
+            <a class="chip" href="/app/#/timer?mode=custom"><i class="dot dot--white"></i>Custom</a>
           </div>
         </div>
       </div>
@@ -190,7 +190,7 @@
         <div class="post__copy">
           <h2 class="scramble-title scramble-title--left" data-scramble-in>SET THE MOOD</h2>
           <p class="body-copy body-copy--left reveal">Rain on a tin roof, a quiet library, a night train. Layer up to three ambient sounds, save the blend, and Leap Gate plays it back the next time you take off.</p>
-          <div class="chips-row reveal"><span class="chip chip--pill"><i class="dot dot--blue"></i>Rain</span><span class="chip"><i class="dot dot--lime"></i>Library</span><span class="chip"><i class="dot dot--white"></i>Night train</span></div>
+          <div class="chips-row reveal"><a class="chip chip--pill" href="/app/#/sounds"><i class="dot dot--blue"></i>Rain</a><a class="chip" href="/app/#/sounds"><i class="dot dot--lime"></i>Café</a><a class="chip" href="/app/#/sounds"><i class="dot dot--white"></i>Night train</a></div>
         </div>
         <div class="radio" id="radio" aria-hidden="true">
           <div class="radio__antenna"></div>
@@ -226,7 +226,7 @@
         <div class="preview__screen" id="previewScreen">
           <div class="preview__logo"><svg class="mark"><use href="#mark" /></svg>LEAP GATE</div>
           <div class="preview__tag">Focus alone. <em>Fly together.</em></div>
-          <div class="preview__btn">Invite your squad</div>
+          <a class="preview__btn" href="/app/#/squads?new=1">Invite your squad</a>
           <div class="preview__device">
             <div class="preview__dhead"><span></span><span></span><span></span></div>
             <div class="preview__dbody">
@@ -262,21 +262,25 @@
             <h3>[Phone]</h3>
             <div class="partner__logo brackets"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><rect x="18" y="6" width="28" height="52" rx="6"/><path d="M28 50h8"/></svg></div>
             <p>Flip-to-focus, lock-screen timer and a home-screen widget that shows how far Pip flew today.</p>
+            <a class="partner__cta" href="/app/#/devices?p=phone">Get it for phone →</a>
           </article>
           <article class="partner">
             <h3>[Desktop]</h3>
             <div class="partner__logo brackets"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="10" width="52" height="34" rx="4"/><path d="M24 54h16M32 44v10"/></svg></div>
             <p>A menu-bar timer that quietly hides distracting sites and apps for exactly as long as you choose.</p>
+            <a class="partner__cta" href="/app/#/devices?p=desktop">Get it for desktop →</a>
           </article>
           <article class="partner">
             <h3>[Watch]</h3>
             <div class="partner__logo brackets"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><rect x="16" y="16" width="32" height="32" rx="9"/><path d="M24 16l2-10h12l2 10M24 48l2 10h12l2-10M32 26v7l4 3"/></svg></div>
             <p>A soft tap on your wrist when a session starts, when a break ends and when your squad takes off.</p>
+            <a class="partner__cta" href="/app/#/devices?p=watch">Get it for watch →</a>
           </article>
           <article class="partner">
             <h3>[Browser]</h3>
             <div class="partner__logo brackets"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><circle cx="32" cy="32" r="24"/><path d="M8 32h48M32 8c8 8 8 40 0 48M32 8c-8 8-8 40 0 48"/></svg></div>
             <p>An extension that syncs with your running session and swaps endless feeds for a calm landing page.</p>
+            <a class="partner__cta" href="/app/#/devices?p=browser">Get the extension →</a>
           </article>
         </div>
       </div>
@@ -295,7 +299,7 @@
             <div class="badge"><i class="tick">✓</i><span>Works <b>offline</b></span></div>
             <div class="badge"><i class="tick">✳</i><span><b>Accessible</b> colour and motion options</span></div>
           </div>
-          <div class="footer__social"><svg class="mark"><use href="#mark" /></svg><svg class="xi"><use href="#x" /></svg><span>See you in the air</span></div>
+          <div class="footer__social"><a href="#hero" aria-label="Back to top"><svg class="mark"><use href="#mark" /></svg></a><a href="https://x.com" target="_blank" rel="noopener" aria-label="Leap Gate on X (opens in a new tab)"><svg class="xi"><use href="#x" /></svg></a><a href="/app/#/signup">See you in the air →</a></div>
         </div>
         <div class="footer__col">
           <h2 class="footer__h">Features</h2>
@@ -303,9 +307,9 @@
         </div>
         <div class="footer__col">
           <h2 class="footer__h">Get Leap Gate</h2>
-          <ul><li><a data-scramble href="#download">iPhone &amp; iPad</a></li><li><a data-scramble href="#download">Android</a></li><li><a data-scramble href="#download">Mac &amp; Windows</a></li><li><a data-scramble href="#download">Browser extension</a></li></ul>
+          <ul><li><a data-scramble href="/app/#/devices?p=phone">iPhone &amp; iPad</a></li><li><a data-scramble href="/app/#/devices?p=phone">Android</a></li><li><a data-scramble href="/app/#/devices?p=desktop">Mac &amp; Windows</a></li><li><a data-scramble href="/app/#/devices?p=browser">Browser extension</a></li><li><a data-scramble href="/app/#/login">Log in</a></li></ul>
         </div>
-        <div class="footer__legal"><span>© 2026 Leap Gate Labs (concept demo)</span><a href="#">Privacy</a><a href="#">Cookies</a><a href="#">Terms</a><a href="#about">About</a></div>
+        <div class="footer__legal"><span>© 2026 Leap Gate Labs (concept demo)</span><a href="/legal/#privacy">Privacy</a><a href="/legal/#cookies">Cookies</a><a href="/legal/#terms">Terms</a><a href="#about">About</a></div>
       </div>
       <div class="lockup" id="lockup" aria-hidden="true">
         <svg class="mark"><use href="#mark" /></svg>

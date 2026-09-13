@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leap Gate App</title>
+  <meta name="theme-color" content="#040a1c" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23040a1c'/><path d='M10 36 54 12 42 50 31 39Z' fill='%2339ff7a'/><path d='M31 39 54 12 26 34Z' fill='%23040a1c' opacity='.55'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Familjen+Grotesk:wght@400;500;600;700&family=Martian+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/app/app.css" />
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="mark" viewBox="0 0 64 48">
+        <path fill="currentColor" d="M20 26 62 2 50 44 38 33Z" />
+        <path fill="currentColor" opacity=".45" d="M38 33 62 2 32 29Z" />
+        <rect fill="currentColor" x="2" y="24" width="14" height="4" rx="2" />
+        <rect fill="currentColor" x="8" y="32" width="16" height="4" rx="2" opacity=".7" />
+        <rect fill="currentColor" x="0" y="40" width="10" height="4" rx="2" opacity=".45" />
+      </symbol>
+    </defs>
+  </svg>
+  <div id="root"></div>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+  <div id="modal-root"></div>
+  <script type="module" src="/src/app/app.js"></script>
+</body>
+</html>

@@ -321,6 +321,13 @@ main { position: relative; z-index: 2; }
     linear-gradient(#fff, #fff) 100% 100%/10px 1px no-repeat, linear-gradient(#fff, #fff) 100% 100%/1px 6px no-repeat; }
 .partner p { margin: 0; font-size: 15px; line-height: 1.45; padding-left: 22px; position: relative; }
 .partner p::before { content: "+"; position: absolute; left: 0; top: -2px; font: 300 18px/1 var(--sans); opacity: .6; }
+.partner__cta { margin-top: 18px; align-self: flex-start; margin-left: 22px; font: 600 10px/1 var(--mono); text-transform: uppercase; color: var(--accent); border-bottom: 1px solid #39ff7a66; padding-bottom: 4px; }
+.partner__cta:hover { border-color: var(--accent); }
+a.chip:hover { color: var(--accent); }
+.footer__social a { display: inline-flex; }
+.footer__social a:hover { color: var(--accent); }
+.preview__btn { pointer-events: auto; }
+.preview__btn:hover { filter: brightness(1.1); }
 .partners .arrow--l { left: 14px; } .partners .arrow--r { right: 14px; }
 
 /* ---------- footer ---------- */

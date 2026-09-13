@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Legal · Leap Gate</title>
+  <meta name="theme-color" content="#040a1c" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23040a1c'/><path d='M10 36 54 12 42 50 31 39Z' fill='%2339ff7a'/><path d='M31 39 54 12 26 34Z' fill='%23040a1c' opacity='.55'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Familjen+Grotesk:wght@400;500;600;700&family=Martian+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/app/app.css" />
+  <style>
+    .legal { max-width: 860px; margin: 0 auto; padding: 0 22px 80px; }
+    .legal__top { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 14px; padding: 16px 22px; border-bottom: 1px solid var(--line); background: #040a1ccc; backdrop-filter: blur(10px); }
+    .legal__top a.brand { display: flex; align-items: center; gap: 8px; font: 900 24px/1 var(--display); letter-spacing: .03em; }
+    .legal__top nav { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+    .legal h1 { font: 900 clamp(56px, 9vw, 110px)/.9 var(--display); text-transform: uppercase; margin: 60px 0 10px; }
+    .legal h1 em { font-style: normal; color: var(--accent); }
+    .legal h2 { font: 900 40px/1 var(--display); text-transform: uppercase; margin: 0 0 12px; }
+    .legal section { scroll-margin-top: 90px; padding: 32px 0; border-top: 1px solid var(--line); }
+    .legal p, .legal li { color: #c3d3f0; }
+    .legal .toc { display: flex; gap: 10px; flex-wrap: wrap; margin: 24px 0 40px; }
+    @media (max-width: 600px) { .legal__top nav .hide-sm { display: none; } }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="mark" viewBox="0 0 64 48"><path fill="currentColor" d="M20 26 62 2 50 44 38 33Z" /><path fill="currentColor" opacity=".45" d="M38 33 62 2 32 29Z" /><rect fill="currentColor" x="2" y="24" width="14" height="4" rx="2" /><rect fill="currentColor" x="8" y="32" width="16" height="4" rx="2" opacity=".7" /><rect fill="currentColor" x="0" y="40" width="10" height="4" rx="2" opacity=".45" /></symbol></defs></svg>
+  <header class="legal__top">
+    <a class="brand" href="/"><svg class="mark"><use href="#mark" /></svg>LEAP GATE</a>
+    <nav aria-label="Legal">
+      <a class="btn btn--ghost btn--sm hide-sm" href="/">Website</a>
+      <a class="btn btn--primary btn--sm" href="/app/#/signup">Get the app</a>
+    </nav>
+  </header>
+  <main class="legal">
+    <h1>The <em>fine print</em></h1>
+    <p>Leap Gate is a concept product. These pages describe how the demo behaves — plainly, without legalese.</p>
+    <nav class="toc" aria-label="Sections">
+      <a class="btn btn--ghost btn--sm" href="#privacy">Privacy</a>
+      <a class="btn btn--ghost btn--sm" href="#cookies">Cookies</a>
+      <a class="btn btn--ghost btn--sm" href="#terms">Terms</a>
+    </nav>
+
+    <section id="privacy">
+      <h2>Privacy</h2>
+      <p>The Leap Gate demo has no server. Your profile, focus sessions, squads, presets and settings are saved in your own browser's local storage and never sent anywhere.</p>
+      <ul>
+        <li>Passwords typed on the log-in or sign-up screen are checked for length and then discarded — they are never stored.</li>
+        <li>"Continue with Google/Apple" in the demo does not contact those services; it simply creates a local sample profile.</li>
+        <li>Invite and download emails are simulated; no email is sent.</li>
+        <li>You can erase everything at any time from <a class="link" href="/app/#/settings?section=data">Settings → Your data</a>.</li>
+      </ul>
+    </section>
+
+    <section id="cookies">
+      <h2>Cookies</h2>
+      <p>We don't set tracking or advertising cookies. The only thing stored is the local-storage record that keeps your demo data between visits. Clearing your browser's site data removes it.</p>
+    </section>
+
+    <section id="terms">
+      <h2>Terms</h2>
+      <p>The demo is provided as-is for evaluation. Focus statistics are motivational, not medical advice. Please be kind in squads, and don't use the app while driving — Pip can wait.</p>
+      <p style="margin-top:24px"><a class="btn btn--primary" href="/app/#/signup">Create an account</a> <a class="btn btn--ghost" href="/">Back to website</a></p>
+    </section>
+  </main>
+</body>
+</html>

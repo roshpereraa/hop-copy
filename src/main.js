@@ -226,6 +226,7 @@ const CARDS = [
   ['Weekly Flight Log', 'A calm Sunday recap of where your attention went, which hours worked best and how far Pip travelled.', 'spiral'],
   ['Offline Mode', 'No signal, no problem. Sessions record locally and sync quietly once you are back online.', 'coil'],
 ];
+const CARD_LINKS = ['/app/#/timer', '/app/#/settings?section=focus', '/app/#/squads', '/app/#/log', '/app/#/settings?section=integrations', '/app/#/sounds', '/app/#/log?range=7', '/app/#/devices'];
 const track = $('#hoodTrack');
 track.innerHTML = CARDS.map(([t, d], i) => `
   <article class="card${i === 1 ? ' is-hot' : ''}">
@@ -233,7 +234,7 @@ track.innerHTML = CARDS.map(([t, d], i) => `
     <canvas data-art="${CARDS[i][2]}"></canvas>
     <div class="card__plus"><i class="plus"></i><i class="plus"></i></div>
     <p>${d}</p>
-    <a class="card__cta" href="#download">Try it</a>
+    <a class="card__cta" href="${CARD_LINKS[i]}">Try it</a>
   </article>`).join('');
 
 const perView = () => (innerWidth <= 900 ? 1 : 3);
@@ -377,6 +378,9 @@ async function start() {
   lenis.start();
   window.scrollTo(0, 0);
   ScrollTrigger.refresh();
+  // deep links like /#download (e.g. from the app) land on their section after the loader
+  const target = location.hash.length > 1 && $(location.hash);
+  if (target) setTimeout(() => lenis.scrollTo(target, { offset: -60, immediate: true }), 50);
   gsap.from('.nav', { y: -50, opacity: 0, duration: 0.9, ease: 'power3.out' });
   gsap.from('#stage', { opacity: 0, duration: 1.6, ease: 'power2.out' });
   gsap.from('.marquee', { opacity: 0, y: 30, duration: 1, delay: 0.4 });
