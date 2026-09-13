@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Glide — Log off. Lift off.</title>
-  <meta name="description" content="Glide is a focus timer with a flying frog. Stay in the zone and Pip glides further; wander off and Pip lands." />
+  <title>Leap Gate — Log off. Lift off.</title>
+  <meta name="description" content="Leap Gate is a focus timer with a flying frog. Stay in the zone and Pip glides further; wander off and Pip lands." />
   <meta name="theme-color" content="#040a1c" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23040a1c'/><path d='M10 36 54 12 42 50 31 39Z' fill='%2339ff7a'/><path d='M31 39 54 12 26 34Z' fill='%23040a1c' opacity='.55'/></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -14,13 +14,13 @@
 </head>
 <body>
   <div class="loader" id="loader" aria-hidden="true">
-    <div class="loader__logo"><svg class="mark"><use href="#mark" /></svg><span>GLIDE</span></div>
+    <div class="loader__logo"><svg class="mark"><use href="#mark" /></svg><span>LEAP GATE</span></div>
     <div class="loader__bar"><i id="loaderBar"></i></div>
   </div>
 
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
-      <!-- Glide mark: folded glider with a trail -->
+      <!-- Leap Gate mark: folded glider with a trail -->
       <symbol id="mark" viewBox="0 0 64 48">
         <path fill="currentColor" d="M20 26 62 2 50 44 38 33Z" />
         <path fill="currentColor" opacity=".45" d="M38 33 62 2 32 29Z" />
@@ -42,13 +42,13 @@
       <button class="announce__close" aria-label="Dismiss announcement" id="announceClose">×</button>
     </div>
     <nav class="nav" aria-label="Main">
-      <a href="#hero" class="logo" aria-label="Glide home"><svg class="mark"><use href="#mark" /></svg><span>GLIDE</span></a>
+      <a href="#hero" class="logo" aria-label="Leap Gate home"><svg class="mark"><use href="#mark" /></svg><span>LEAP GATE</span></a>
       <div class="nav__links" id="navLinks">
         <a href="#cockpit" data-scramble>Features</a>
         <a href="#squads" data-scramble>Squads</a>
         <a href="#how" data-scramble>How it works</a>
         <a href="#about" data-scramble>About</a>
-        <a href="#" class="nav__x" aria-label="Glide on X"><svg><use href="#x" /></svg></a>
+        <a href="#" class="nav__x" aria-label="Leap Gate on X"><svg><use href="#x" /></svg></a>
         <a href="#download" class="btn btn--sm">Get the app</a>
       </div>
       <button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><i></i><i></i></button>
@@ -65,7 +65,7 @@
           <span class="line" data-type>LOG OFF.</span>
           <span class="line line--accent" data-type>LIFT OFF.</span>
         </h1>
-        <p class="hero__lede reveal">Glide is a focus timer with a flying frog. Start a session, flip your phone face-down, and Pip glides a little further for every minute you stay in the zone.</p>
+        <p class="hero__lede reveal">Leap Gate is a focus timer with a flying frog. Start a session, flip your phone face-down, and Pip glides a little further for every minute you stay in the zone.</p>
         <p class="hero__lede reveal">Wander off to another app and Pip lands. No guilt — just take off again.</p>
         <a href="#download" class="btn btn--glow reveal">Start gliding</a>
       </div>
@@ -79,7 +79,7 @@
     </section>
 
     <!-- PINNED STORY -->
-    <section class="story" id="how" aria-label="How Glide works">
+    <section class="story" id="how" aria-label="How Leap Gate works">
       <div class="story__pin">
         <div class="streak" id="streak"></div>
         <div class="ghosts" aria-hidden="true">
@@ -90,7 +90,7 @@
           <div class="beat__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="24" cy="27" r="16"/><path d="M24 27V17M19 4h10M24 4v7M37 12l3-3"/></svg></div>
           <h2 class="beat__title">Start a session.</h2>
           <p class="beat__sub">Pick a length. Tap once. That's it.</p>
-          <p class="beat__sig">— GLIDE —</p>
+          <p class="beat__sig">— LEAP GATE —</p>
         </div>
 
         <div class="beat" data-beat="1">
@@ -99,7 +99,7 @@
             <span class="chip chip--lg"><i class="dot dot--lime"></i>Timer up</span>
           </div>
           <p class="beat__sub">Flip your phone over and the countdown begins.</p>
-          <p class="beat__sig">— GLIDE —</p>
+          <p class="beat__sig">— LEAP GATE —</p>
         </div>
 
         <div class="beat" data-beat="2">
@@ -110,21 +110,21 @@
             <span class="chip chip--lg"><i class="dot dot--blue"></i>Draw</span>
           </div>
           <p class="beat__sub">Any task counts, as long as you stay on it.</p>
-          <p class="beat__sig">— GLIDE —</p>
+          <p class="beat__sig">— LEAP GATE —</p>
         </div>
 
         <div class="beat" data-beat="3">
           <div class="beat__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8v32h32"/><path d="M14 32c6-2 10-8 14-16"/><path d="M22 14l6 2 2-6"/></svg></div>
           <h2 class="beat__title">Stay longer, fly further.</h2>
           <p class="beat__sub">minutes × streak × calm</p>
-          <p class="beat__sig">— GLIDE —</p>
+          <p class="beat__sig">— LEAP GATE —</p>
         </div>
 
         <div class="beat" data-beat="4">
           <div class="beat__icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="16" r="6"/><circle cx="33" cy="18" r="5"/><path d="M5 40c1-8 6-12 12-12s11 4 12 12M29 29c7-1 13 3 14 11"/></svg></div>
-          <h2 class="beat__title">Glide together.</h2>
+          <h2 class="beat__title">Leap together.</h2>
           <p class="beat__sub">Friends in the same session lift each other up.</p>
-          <p class="beat__sig">— GLIDE —</p>
+          <p class="beat__sig">— LEAP GATE —</p>
         </div>
 
         <div class="caption caption--left" data-beat="5">
@@ -147,8 +147,8 @@
     <section class="intro">
       <div class="plus-field" data-plus="16"></div>
       <div class="intro__band">
-        <h2 class="scramble-title" data-scramble-in>GLIDE IS A <em>FOCUS GAME</em></h2>
-        <p class="body-copy reveal">Most productivity apps nag you with lists. Glide gives your attention somewhere to go. Every focused minute adds distance to Pip's flight; switch to a feed and Pip drifts down to land. It is gentle on purpose — the goal is a better habit, not a guilt trip.</p>
+        <h2 class="scramble-title" data-scramble-in>LEAP GATE IS A <em>FOCUS GAME</em></h2>
+        <p class="body-copy reveal">Most productivity apps nag you with lists. Leap Gate gives your attention somewhere to go. Every focused minute adds distance to Pip's flight; switch to a feed and Pip drifts down to land. It is gentle on purpose — the goal is a better habit, not a guilt trip.</p>
       </div>
     </section>
 
@@ -189,7 +189,7 @@
       <div class="post__inner">
         <div class="post__copy">
           <h2 class="scramble-title scramble-title--left" data-scramble-in>SET THE MOOD</h2>
-          <p class="body-copy body-copy--left reveal">Rain on a tin roof, a quiet library, a night train. Layer up to three ambient sounds, save the blend, and Glide plays it back the next time you take off.</p>
+          <p class="body-copy body-copy--left reveal">Rain on a tin roof, a quiet library, a night train. Layer up to three ambient sounds, save the blend, and Leap Gate plays it back the next time you take off.</p>
           <div class="chips-row reveal"><span class="chip chip--pill"><i class="dot dot--blue"></i>Rain</span><span class="chip"><i class="dot dot--lime"></i>Library</span><span class="chip"><i class="dot dot--white"></i>Night train</span></div>
         </div>
         <div class="radio" id="radio" aria-hidden="true">
@@ -207,7 +207,7 @@
     <section class="hood" id="cockpit">
       <div class="plus-side plus-side--l"></div><div class="plus-side plus-side--r"></div>
       <h2 class="scramble-title" data-scramble-in>WHAT'S IN THE <em>COCKPIT</em></h2>
-      <p class="body-copy reveal">Eight pieces that keep Glide simple on the surface and smart underneath — from the timer itself to the weekly log that shows where your attention actually went.</p>
+      <p class="body-copy reveal">Eight pieces that keep Leap Gate simple on the surface and smart underneath — from the timer itself to the weekly log that shows where your attention actually went.</p>
       <div class="hood__wrap">
         <button class="arrow arrow--l" id="hoodPrev" aria-label="Previous features">←</button>
         <div class="hood__viewport">
@@ -224,7 +224,7 @@
         <div class="preview__grid"><i></i><i></i><i></i></div>
         <div class="preview__label" aria-hidden="true">SQUAD SESSIONS</div>
         <div class="preview__screen" id="previewScreen">
-          <div class="preview__logo"><svg class="mark"><use href="#mark" /></svg>GLIDE</div>
+          <div class="preview__logo"><svg class="mark"><use href="#mark" /></svg>LEAP GATE</div>
           <div class="preview__tag">Focus alone. <em>Fly together.</em></div>
           <div class="preview__btn">Invite your squad</div>
           <div class="preview__device">
@@ -249,7 +249,7 @@
       </div>
       <div class="about__block">
         <h2 class="scramble-title" data-scramble-in>OUR MISSION: <em>MAKE FOCUS FEEL LIGHT</em></h2>
-        <p class="body-copy reveal">Attention is the most valuable thing you spend each day. Glide makes protecting it feel less like willpower and more like play — and keeps every minute of your data on your own device.</p>
+        <p class="body-copy reveal">Attention is the most valuable thing you spend each day. Leap Gate makes protecting it feel less like willpower and more like play — and keeps every minute of your data on your own device.</p>
       </div>
     </section>
 
@@ -286,10 +286,10 @@
     <footer class="footer">
       <div class="footer__grid">
         <div class="footer__col footer__col--brand">
-          <h2 class="footer__h">GLIDE</h2>
+          <h2 class="footer__h">LEAP GATE</h2>
           <p class="footer__blurb reveal">A focus timer with a flying frog. Choose a mode, put your phone down and let Pip glide while you work. Invite friends to fly in formation, look back on a weekly flight log, and keep all of it private on your own device.</p>
           <div class="badges">
-            <div class="badge badge--big"><svg class="mark mark--accent"><use href="#mark" /></svg><span>Free to start, <b>Glide+</b> for squads</span></div>
+            <div class="badge badge--big"><svg class="mark mark--accent"><use href="#mark" /></svg><span>Free to start, <b>Leap Gate+</b> for squads</span></div>
             <div class="badge"><i class="tick">◆</i><span><b>Private</b> by design, stored on-device</span></div>
             <div class="badge"><i class="tick">✓</i><span><b>No ads</b>, now or ever</span></div>
             <div class="badge"><i class="tick">✓</i><span>Works <b>offline</b></span></div>
@@ -302,14 +302,14 @@
           <ul><li><a data-scramble href="#cockpit">The cockpit</a></li><li><a data-scramble href="#how">How it works</a></li><li><a data-scramble href="#modes">Focus modes</a></li><li><a data-scramble href="#squads">Squad sessions</a></li></ul>
         </div>
         <div class="footer__col">
-          <h2 class="footer__h">Get Glide</h2>
+          <h2 class="footer__h">Get Leap Gate</h2>
           <ul><li><a data-scramble href="#download">iPhone &amp; iPad</a></li><li><a data-scramble href="#download">Android</a></li><li><a data-scramble href="#download">Mac &amp; Windows</a></li><li><a data-scramble href="#download">Browser extension</a></li></ul>
         </div>
-        <div class="footer__legal"><span>© 2026 Glide Labs (concept demo)</span><a href="#">Privacy</a><a href="#">Cookies</a><a href="#">Terms</a><a href="#about">About</a></div>
+        <div class="footer__legal"><span>© 2026 Leap Gate Labs (concept demo)</span><a href="#">Privacy</a><a href="#">Cookies</a><a href="#">Terms</a><a href="#about">About</a></div>
       </div>
       <div class="lockup" id="lockup" aria-hidden="true">
         <svg class="mark"><use href="#mark" /></svg>
-        <span>GLIDE</span>
+        <span>LEAP<br />GATE</span>
       </div>
     </footer>
   </main>

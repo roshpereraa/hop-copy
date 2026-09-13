@@ -1,6 +1,6 @@
-# Glide — concept landing page
+# Leap Gate — concept landing page
 
-An animated, scroll-driven landing page for **Glide**, a (fictional) focus-timer app with a flying frog mascot, Pip.
+An animated, scroll-driven landing page for **Leap Gate**, a (fictional) focus-timer app with a flying frog mascot, Pip.
 All branding, copy and the mascot are original concept placeholders.
 
 - **Vite** + vanilla JS
