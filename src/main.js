@@ -129,6 +129,18 @@ $$('.reveal').filter((el) => !el.closest('.hero')).forEach((el) => {
 /* ---------------- announcement ---------------- */
 $('#announceClose').addEventListener('click', () => $('#announce').classList.add('hide'));
 
+/* ---------------- contract address ---------------- */
+const caBtn = $('#caBtn'), caText = $('#caText');
+const ca = caBtn.dataset.ca;
+const caShort = ca.length > 12 ? `${ca.slice(0, 4)}…${ca.slice(-4)}` : ca;
+caText.textContent = caShort;
+caBtn.addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(ca); caText.textContent = 'Copied!'; }
+  catch { caText.textContent = 'Copy failed'; }
+  caBtn.classList.add('copied');
+  setTimeout(() => { caText.textContent = caShort; caBtn.classList.remove('copied'); }, 1600);
+});
+
 /* ---------------- mobile menu ---------------- */
 const burger = $('#burger'), navLinks = $('#navLinks');
 const setMenu = (open) => { navLinks.classList.toggle('open', open); burger.setAttribute('aria-expanded', String(open)); };

@@ -77,6 +77,14 @@ main { position: relative; z-index: 2; }
 .nav__links a:not(.btn) { opacity: .85; transition: opacity .2s, color .2s; }
 .nav__links a:not(.btn):hover { opacity: 1; color: var(--accent); }
 .nav__x svg { width: 13px; height: 13px; display: block; }
+.nav__ca {
+  display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 10px 0 4px;
+  background: #39ff7a0f; border: 1px solid #39ff7a55; border-radius: 4px; color: #eaf3ff;
+  font: inherit; text-transform: none; cursor: pointer; transition: border-color .2s, background .2s;
+}
+.nav__ca b { background: var(--accent); color: #03140a; border-radius: 2px; padding: 5px 5px 4px; font-weight: 700; }
+.nav__ca:hover { border-color: var(--accent); background: #39ff7a1f; }
+.nav__ca.copied b { background: #eaf3ff; }
 .nav__burger { display: none; background: none; border: 0; width: 34px; height: 34px; position: relative; }
 .nav__burger i { position: absolute; left: 7px; right: 7px; height: 2px; background: #fff; transition: transform .3s, top .3s; }
 .nav__burger i:first-child { top: 13px; } .nav__burger i:last-child { top: 20px; }
@@ -376,6 +384,7 @@ a.chip:hover { color: var(--accent); }
   .nav__links.open { transform: none; opacity: 1; visibility: visible; }
   .nav__links a:not(.btn) { padding: 14px 0; width: 100%; border-bottom: 1px solid #ffffff10; }
   .nav__links .btn { margin-top: 16px; height: 40px; font-size: 11px; }
+  .nav__ca { margin-top: 14px; height: 40px; font-size: 12px; }
   .hero__copy { top: auto; bottom: 150px; transform: none; right: 20px; left: 20px; }
   .hero__title { font-size: clamp(54px, 15vw, 88px); }
   .hero__lede { font-size: 15px; text-shadow: 0 1px 12px #020614; }
