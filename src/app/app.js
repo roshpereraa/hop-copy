@@ -1,5 +1,6 @@
 import * as S from './store.js';
 import * as Audio from './sound.js';
+import * as P from './pools.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -14,6 +15,8 @@ const I = {
   timer: '<circle cx="12" cy="13" r="8"/><path d="M12 13V9M9 2h6"/>',
   squads: '<circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c.5-4 3.2-6 6.5-6s6 2 6.5 6M15 14c3.3-.3 6 1.6 6.5 5"/>',
   log: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  pools: '<path d="M3 17l5-6 4 3 5-7 4 4"/><path d="M3 21h18"/>',
+  coin: '<circle cx="12" cy="12" r="9"/><path d="M9 9.5c0-1.4 1.3-2 3-2s3 .7 3 2-1.3 1.8-3 2.3-3 1-3 2.4 1.3 2.3 3 2.3 3-.8 3-2M12 5.5v13"/>',
   sound: '<path d="M4 9v6h4l5 4V5L8 9Z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19.5 5.5a9 9 0 0 1 0 13"/>',
   devices: '<rect x="2" y="4" width="14" height="10" rx="1.5"/><path d="M6 18h6M9 14v4"/><rect x="17" y="8" width="5" height="12" rx="1.2"/>',
   settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>',
@@ -99,7 +102,7 @@ function render() {
   }
   if (user && PUBLIC.includes(name)) { location.replace(`#${query.next ? decodeURIComponent(query.next) : '/dashboard'}`); return; }
   if (PUBLIC.includes(name)) return renderAuth(name, query);
-  const pages = { dashboard: Dashboard, timer: Timer, squads: parts[1] ? SquadDetail : Squads, log: Log, sounds: Sounds, devices: Devices, settings: Settings };
+  const pages = { dashboard: Dashboard, pools: parts[1] ? PoolDetail : Pools, timer: Timer, squads: parts[1] ? SquadDetail : Squads, log: Log, sounds: Sounds, devices: Devices, settings: Settings };
   const page = pages[name] || Lost;
   renderShell(name, page, { parts, query });
   window.scrollTo(0, 0);
@@ -199,7 +202,7 @@ function renderAuth(mode, query) {
 
 /* ---------------- shell ---------------- */
 const NAV = [
-  ['dashboard', 'Dashboard', 'home'], ['timer', 'Focus timer', 'timer'], ['squads', 'Squads', 'squads'],
+  ['dashboard', 'Dashboard', 'home'], ['pools', 'Pools', 'pools'], ['timer', 'Focus timer', 'timer'], ['squads', 'Squads', 'squads'],
   ['log', 'Flight log', 'log'], ['sounds', 'Sounds', 'sound'],
 ];
 const NAV2 = [['devices', 'Devices', 'devices'], ['settings', 'Settings', 'settings']];
@@ -230,6 +233,7 @@ function renderShell(name, page, ctx) {
         <h1>${title}</h1>
         <div class="topbar__spacer"></div>
         <a class="btn btn--ghost btn--sm hide-sm" id="liveChip" href="#/timer" hidden></a>
+        <a class="btn btn--ghost btn--sm points-chip" href="#/pools?status=mine" title="Lift points — earned from focus minutes, play points only">${ico('coin', 'mark')} <b id="pointsVal">${st.points.toLocaleString()}</b> LP</a>
         <a class="btn btn--primary btn--sm hide-sm" href="#/timer?autostart=1">${ico('play', 'mark')} Start session</a>
         <div class="dropdown" id="notifDd">
           <button class="icon-btn" aria-label="Notifications${unread ? ` (${unread} unread)` : ''}" aria-haspopup="true" aria-expanded="false">${ico('bell')}${unread ? '<i class="badge-dot"></i>' : ''}</button>
@@ -400,6 +404,7 @@ function Dashboard() {
       </div>
     </section>
     ${statCards()}
+    <section class="card"><div class="card__head"><h2>Live pools</h2><div class="quick"><span class="eyebrow" id="dashPoolsClose"></span><a class="btn btn--ghost btn--sm" href="#/pools">All pools</a></div></div><div class="pool-strip" id="dashPools"><div class="empty">Loading live prices…</div></div></section>
     <div class="grid-2">
       <section class="card"><div class="card__head"><h2>Last 7 days</h2><a class="btn btn--ghost btn--sm" href="#/log">Open flight log</a></div>${chart(7)}</section>
       <section class="card"><div class="card__head"><h2>Your squads</h2><a class="btn btn--ghost btn--sm" href="#/squads">All squads</a></div>
@@ -415,10 +420,22 @@ function Dashboard() {
       </section>
     </div>`,
     bind(page) {
+      let alive = true;
+      P.settleDue(toast).then((n) => n && alive && render());
+      P.loadMarkets().then(() => {
+        if (!alive) return;
+        const end = P.liveEnd();
+        const top = P.poolsFor('live').map((x) => ({ ...x, c: P.crowd(x.id, x.end) })).filter((x) => P.coinFor(x.id)).sort((a, b) => b.c.participants - a.c.participants).slice(0, 4);
+        $('#dashPools', page).innerHTML = top.map((x) => poolCard(x.id, x.end, x.c, true)).join('');
+        $('#dashPoolsClose', page).dataset.countdown = end;
+        startCountdowns(page);
+      });
+      const stopTick = () => { alive = false; clearInterval(countdownTimer); };
       $$('[data-quick-sound]', page).forEach((b) => (b.onclick = () => {
         const k = b.dataset.quickSound;
         if (Audio.isPlaying(k)) { Audio.stop(k); b.textContent = 'Play'; } else { Audio.play(k, 0.5); b.textContent = 'Stop'; toast(`${Audio.LAYERS[k].label} playing — fine-tune it in Sounds`); }
       }));
+      return stopTick;
     },
   };
 }
@@ -762,6 +779,284 @@ function Settings({ query }) {
       $('#resetDemo', page).onclick = async () => { if (await confirmBox({ title: 'Reset demo data?', body: 'Sessions, squads, presets and notifications are replaced with fresh samples.', ok: 'Reset' })) { S.resetDemo(); toast('Demo data reset'); go('#/dashboard'); } };
       $('#deleteAcc', page).onclick = async () => { if (await confirmBox({ title: 'Delete account?', body: 'Everything stored in this browser is erased. This cannot be undone.', ok: 'Delete account', danger: true })) { resetSession(); Audio.stopAll(); S.wipe(); toast('Account deleted'); location.hash = '/signup'; } };
       $('#logout2', page).onclick = () => $('#logout').click();
+    },
+  };
+}
+
+
+/* ---------------- pools ---------------- */
+let countdownTimer = 0;
+function startCountdowns(scope) {
+  clearInterval(countdownTimer);
+  const run = () => {
+    $$('[data-countdown]', scope).forEach((el) => {
+      const end = +el.dataset.countdown, left = end - Date.now();
+      el.textContent = el.dataset.prefix ? `${el.dataset.prefix} ${P.countdown(left)}` : P.countdown(left);
+    });
+    const pv = $('#pointsVal'); if (pv) pv.textContent = S.get().points.toLocaleString();
+  };
+  run();
+  countdownTimer = setInterval(run, 1000);
+}
+const coinImg = (c, size = 40) => c?.image
+  ? `<img class="coin-img" src="${esc(c.image)}" alt="" width="${size}" height="${size}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'coin-img coin-img--txt',textContent:'${esc((c.symbol || '?')[0].toUpperCase())}'}))" />`
+  : `<span class="coin-img coin-img--txt" style="width:${size}px;height:${size}px">${esc((c?.symbol || '?')[0].toUpperCase())}</span>`;
+const statusPill = (st) => ({ live: '<span class="pill pill--live">● Live</span>', locked: '<span class="pill pill--lock">Locked</span>', upcoming: '<span class="pill pill--blue">Upcoming</span>', resolved: '<span class="pill">Resolved</span>' }[st]);
+const changeTag = (ch) => `<span class="chg ${ch >= 0 ? 'up' : 'down'}">${ch >= 0 ? '▲' : '▼'} ${Math.abs(ch).toFixed(2)}%</span>`;
+
+function poolCard(id, end, c, compact = false) {
+  const coin = P.coinFor(id), st = P.statusOf(end);
+  if (!coin) return '';
+  const mine = c.mine.length;
+  return `<a class="card pool ${st === 'live' ? 'pool--live' : ''}" href="#/pools/${id}?end=${end}">
+    <div class="pool__top">${coinImg(coin)}${mine ? '<span class="pill pill--lime">Your call</span>' : ''}${statusPill(st)}</div>
+    <h3 class="pool__title">${esc(coin.symbol.toUpperCase())} price at ${P.fmtTime(end)}</h3>
+    <div class="pool__name">${esc(coin.name)}</div>
+    <div class="pool__now">now <b>${P.fmtPrice(coin.price)}</b> ${changeTag(coin.change)}</div>
+    ${compact ? '' : '<hr />'}
+    <div class="pool__stats">
+      <div><span class="eyebrow">Participants</span><b>${c.participants}</b></div>
+      <div><span class="eyebrow">Total staked</span><b>${c.staked.toLocaleString()} LP</b></div>
+      <div><span class="eyebrow">${st === 'resolved' ? 'Closed' : st === 'upcoming' ? 'Opens in' : 'Time left'}</span><b data-countdown="${st === 'upcoming' ? end - P.HOUR : end}">${P.countdown((st === 'upcoming' ? end - P.HOUR : end) - Date.now())}</b></div>
+    </div>
+  </a>`;
+}
+
+function Pools({ query }) {
+  const status = ['live', 'upcoming', 'resolved', 'mine', 'all'].includes(query.status) ? query.status : 'live';
+  const cat = CATS.includes(query.cat) ? query.cat : 'all';
+  const q = (query.q || '').toLowerCase();
+  const link = (patch) => `#/pools?${new URLSearchParams({ status, cat, ...(q ? { q } : {}), ...patch })}`;
+  return {
+    title: 'Pools',
+    html: `
+    <section class="pools-head">
+      <div><h2 class="pools-h">Pools</h2><p>Call where a coin closes each hour. The nearer you land, the more Lift points you earn.</p></div>
+      <nav class="seg" aria-label="Status">${[['live', 'Live'], ['upcoming', 'Upcoming'], ['resolved', 'Resolved'], ['mine', 'My forecasts'], ['all', 'All']].map(([k, l]) => `<a href="${link({ status: k })}" class="${k === status ? 'on' : ''}">${l}</a>`).join('')}</nav>
+    </section>
+    <div class="pools-bar">
+      <nav class="cats" aria-label="Category" id="cats"><a href="${link({ cat: 'all' })}" class="${cat === 'all' ? 'on' : ''}">All pools <i data-count="all">…</i></a>${Object.entries(P.CATEGORIES).map(([k, v]) => `<a href="${link({ cat: k })}" class="${cat === k ? 'on' : ''}">${v.label} <i data-count="${k}">…</i></a>`).join('')}</nav>
+      <div class="pools-tools">
+        <input class="input input--sm" id="poolSearch" type="search" placeholder="Search coins" value="${esc(q)}" aria-label="Search coins" />
+        <a class="btn btn--ghost btn--sm" href="#/pools?status=${status}&cat=${cat}" id="refreshPools">Refresh prices</a>
+        <a class="btn btn--primary btn--sm" href="#/timer?autostart=1" title="Earn 1 LP per focused minute">Earn LP</a>
+      </div>
+    </div>
+    <p class="api-note" id="apiNote">Live prices from Binance &amp; CoinGecko, refreshed every minute · Lift points are play points with no cash value.</p>
+    <div id="poolsBody"><div class="pool-grid">${Array.from({ length: 8 }, () => '<div class="card pool pool--skeleton"></div>').join('')}</div></div>`,
+    bind(page) {
+      let alive = true;
+      const draw = async (force) => {
+        await P.loadMarkets(force);
+        if (!alive) return;
+        await P.settleDue(toast);
+        $('#apiNote', page).textContent = P.isSimulated() ? 'Price APIs unreachable right now — showing reference prices. Lift points are play points with no cash value.' : 'Live prices from Binance & CoinGecko, refreshed every minute · Lift points are play points with no cash value.';
+        const inCat = (id) => (cat === 'all' || P.CATEGORIES[cat].ids.includes(id));
+        const matches = (id) => !q || `${id} ${P.coinFor(id)?.symbol} ${P.coinFor(id)?.name}`.toLowerCase().includes(q);
+        const body = $('#poolsBody', page);
+        if (status === 'mine') {
+          const list = S.get().forecasts.filter((f) => inCat(f.coinId) && matches(f.coinId));
+          Object.keys(P.CATEGORIES).concat('all').forEach((k) => { const el = $(`[data-count="${k}"]`, page); if (el) el.textContent = S.get().forecasts.filter((f) => k === 'all' || P.CATEGORIES[k].ids.includes(f.coinId)).length; });
+          const won = S.get().forecasts.filter((f) => f.status !== 'open').reduce((a, f) => a + (f.payout - f.stake), 0);
+          body.innerHTML = `<div class="grid-4" style="margin-bottom:16px">
+            <div class="card stat"><span class="eyebrow">Balance</span><span class="stat__val">${S.get().points.toLocaleString()}<small>LP</small></span><a class="stat__foot" href="#/timer?autostart=1">Earn more by focusing →</a></div>
+            <div class="card stat"><span class="eyebrow">Open calls</span><span class="stat__val">${S.get().forecasts.filter((f) => f.status === 'open').length}</span></div>
+            <div class="card stat"><span class="eyebrow">Resolved</span><span class="stat__val">${S.get().forecasts.filter((f) => f.status !== 'open').length}</span></div>
+            <div class="card stat"><span class="eyebrow">Net result</span><span class="stat__val ${won >= 0 ? 'txt-up' : 'txt-down'}">${won >= 0 ? '+' : ''}${won}<small>LP</small></span></div></div>
+          ${list.length ? `<section class="card"><div class="table-wrap"><table><thead><tr><th>Pool</th><th>Close</th><th>Your call</th><th>Stake</th><th>Status</th><th>Actual</th><th>Payout</th><th><span class="sr-only">Open</span></th></tr></thead><tbody>
+            ${list.map((f) => { const c = P.coinFor(f.coinId); return `<tr><td><span class="cell-coin">${coinImg(c, 22)} ${esc(f.symbol.toUpperCase())}</span></td><td>${P.fmtTime(f.end)}</td><td>${P.fmtPrice(f.price)}</td><td>${f.stake} LP</td><td>${f.status === 'open' ? `<span class="pill pill--live" data-countdown="${f.end}">${P.countdown(f.end - Date.now())}</span>` : `<span class="pill ${f.status === 'won' ? 'pill--green' : f.status === 'partial' ? 'pill--lime' : ''}">${f.status}</span>`}</td><td>${f.actual ?? '—'}</td><td>${f.payout != null ? `${f.payout} LP` : '—'}</td><td><a class="btn btn--ghost btn--sm" href="#/pools/${f.coinId}?end=${f.end}">Open</a></td></tr>`; }).join('')}
+          </tbody></table></div></section>` : `<section class="card empty"><h2 style="font:800 28px/1 var(--display)">NO FORECASTS YET</h2><p>Pick a live pool and make your first call.</p><a class="btn btn--primary" href="#/pools?status=live">Browse live pools</a></section>`}`;
+        } else {
+          const pools = P.poolsFor(status).filter((x) => P.coinFor(x.id));
+          Object.keys(P.CATEGORIES).concat('all').forEach((k) => { const el = $(`[data-count="${k}"]`, page); if (el) el.textContent = pools.filter((x) => k === 'all' || P.CATEGORIES[k].ids.includes(x.id)).length; });
+          const shown = pools.filter((x) => inCat(x.id) && matches(x.id)).map((x) => ({ ...x, c: P.crowd(x.id, x.end) }));
+          body.innerHTML = shown.length ? `<div class="pool-grid">${shown.map((x) => poolCard(x.id, x.end, x.c)).join('')}</div>`
+            : `<section class="card empty">No pools match${q ? ` “${esc(q)}”` : ''}.<br /><a class="btn btn--ghost btn--sm" href="#/pools">Clear filters</a></section>`;
+        }
+        startCountdowns(page);
+      };
+      draw(false);
+      const refresh = setInterval(() => draw(false), 60000);
+      // re-render the list when the hour rolls over
+      const rollover = setTimeout(() => render(), P.liveEnd() - Date.now() + 1500);
+      $('#refreshPools', page).onclick = (e) => { e.preventDefault(); toast('Refreshing prices…'); draw(true); };
+      let t;
+      if (q) { const si = $('#poolSearch', page); si.focus(); si.setSelectionRange(si.value.length, si.value.length); }
+      $('#poolSearch', page).oninput = (e) => { clearTimeout(t); t = setTimeout(() => history.replaceState(null, '', link({ q: e.target.value })) || render(), 350); };
+      return () => { alive = false; clearInterval(refresh); clearTimeout(rollover); clearInterval(countdownTimer); };
+    },
+  };
+}
+const CATS = Object.keys(P.CATEGORIES);
+
+function PoolDetail({ parts, query }) {
+  const id = parts[1];
+  if (!CATS.some((k) => P.CATEGORIES[k].ids.includes(id))) return Lost();
+  const end = +query.end || P.liveEnd();
+  const range = ['1h', '24h', '7d', '30d'].includes(query.range) ? query.range : '24h';
+  const st = P.statusOf(end);
+  return {
+    title: 'Pool',
+    html: `
+    <a class="auth__back" href="#/pools?status=${st === 'locked' ? 'live' : st}" style="margin:0">${ico('back', 'mark')} All pools</a>
+    <section class="pool-hero" id="poolHero"><div class="empty">Loading pool…</div></section>
+    <div class="pool-layout">
+      <div style="display:grid;gap:16px;align-content:start;min-width:0">
+        <section class="card">
+          <div class="card__head"><h2>Price chart</h2>
+            <nav class="seg" aria-label="Chart range">${['1h', '24h', '7d', '30d'].map((r) => `<a href="#/pools/${id}?end=${end}&range=${r}" class="${r === range ? 'on' : ''}">${r.toUpperCase()}</a>`).join('')}</nav></div>
+          <div class="chart-box"><canvas id="priceChart" aria-label="Price chart" role="img"></canvas><div class="chart-tip" id="chartTip" hidden></div></div>
+          <div class="chart-legend"><span><i style="background:#39ff7a"></i>Price</span><span><i class="dash" style="border-color:#b8ff3c"></i>Your call</span><span><i class="dash" style="border-color:#4d8dff"></i>Round close</span><span class="eyebrow" id="chartSrc"></span></div>
+        </section>
+        <section class="card"><div class="card__head"><h2>Crowd forecasts</h2><span class="eyebrow">where other pilots called it</span></div><div id="crowdChart" class="crowd"></div></section>
+        <section class="card"><div class="card__head"><h2>How scoring works</h2><a class="btn btn--ghost btn--sm" href="#/pools?status=mine">My forecasts</a></div>
+          <div class="rules">
+            <div><b>1 · Call the close</b><p>Enter the price you think this coin will show at ${P.fmtTime(end)}. Calls lock 5 minutes before close.</p></div>
+            <div><b>2 · Accuracy</b><p>Exact = full score. Every 1% away halves it; 2% away scores zero.</p></div>
+            <div><b>3 · Timing</b><p>Calls made early in the hour earn up to a 1.5× timing bonus.</p></div>
+            <div><b>4 · Payout</b><p>Stake × accuracy × timing × 2. Lift points only — earn more by <a class="link" href="#/timer">focusing</a>.</p></div>
+          </div>
+        </section>
+      </div>
+      <aside style="display:grid;gap:16px;align-content:start">
+        <section class="card" id="forecastCard"><div class="empty">Loading…</div></section>
+        <section class="card"><div class="card__head"><h2>Your calls here</h2></div><div id="myCalls" class="list"></div></section>
+        <section class="card"><div class="card__head"><h2>More pools</h2><a class="btn btn--ghost btn--sm" href="#/pools?cat=${P.categoryOf(id)}">${P.CATEGORIES[P.categoryOf(id)].label}</a></div><div id="related" class="list"></div></section>
+      </aside>
+    </div>`,
+    bind(page) {
+      let alive = true, chart = null, hoverX = null, previewPrice = null;
+      const canvas = $('#priceChart', page), tip = $('#chartTip', page);
+      const redraw = () => {
+        if (!chart) return;
+        const mine = S.get().forecasts.filter((f) => f.coinId === id && f.end === end);
+        const lines = [...mine.map((f) => ({ value: f.price, color: '#b8ff3c', label: `YOU ${P.fmtPrice(f.price)}` })), ...(previewPrice ? [{ value: previewPrice, color: '#39ff7a', label: `CALL ${P.fmtPrice(previewPrice)}` }] : [])];
+        const h = P.drawChart(canvas, chart.view, { lines, markerTs: end, hover: hoverX });
+        if (h && hoverX != null) {
+          tip.hidden = false;
+          tip.innerHTML = `<b>${P.fmtPrice(h.p)}</b><span>${new Date(h.t).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>`;
+          tip.style.left = `${Math.min(canvas.clientWidth - 150, Math.max(0, hoverX - 70))}px`;
+        } else tip.hidden = true;
+      };
+      canvas.addEventListener('pointermove', (e) => { hoverX = e.offsetX; redraw(); });
+      canvas.addEventListener('pointerleave', () => { hoverX = null; redraw(); });
+      const onResize = () => redraw();
+      addEventListener('resize', onResize);
+
+      const loadChartData = async () => {
+        const days = range === '1h' || range === '24h' ? 1 : range === '7d' ? 7 : 30;
+        const data = await P.loadChart(id, days);
+        if (!alive) return;
+        const pts = range === '1h' ? data.points.filter((pt) => pt.t >= Date.now() - P.HOUR - 10 * 60000) : data.points;
+        const coin = P.coinFor(id);
+        // append the freshest spot price so the line ends "now"
+        const view = coin && P.statusOf(end) !== 'resolved' ? [...pts, { t: Date.now(), p: coin.price }] : pts;
+        chart = { data, view };
+        $('#chartSrc', page).textContent = data.simulated ? 'Simulated — price APIs unavailable' : `Source: ${data.source}`;
+        redraw();
+        return data;
+      };
+
+      const renderAll = async () => {
+        await P.loadMarkets();
+        if (!alive) return;
+        await P.settleDue(toast);
+        const coin = P.coinFor(id), status = P.statusOf(end), c = P.crowd(id, end);
+        if (!coin) { $('#poolHero', page).innerHTML = '<div class="empty">This coin is unavailable right now. <a class="link" href="#/pools">Back to pools</a></div>'; return; }
+        document.title = `${coin.symbol.toUpperCase()} pool · Leap Gate`;
+        $('.topbar h1').textContent = `${coin.symbol.toUpperCase()} pool`;
+        const data = await loadChartData();
+        const closePrice = status === 'resolved' && data ? P.priceAt(data.points, end) : null;
+        $('#poolHero', page).innerHTML = `
+          <div class="pool-hero__id">${coinImg(coin, 56)}<div><div class="quick" style="gap:8px;margin-bottom:6px">${statusPill(status)}<span class="pill">${P.CATEGORIES[P.categoryOf(id)].label}</span></div><h2>${esc(coin.symbol.toUpperCase())} price at ${P.fmtTime(end)}</h2><p>${esc(coin.name)}</p></div></div>
+          <div class="pool-hero__stats">
+            <div><span class="eyebrow">Now</span><b>${P.fmtPrice(coin.price)}</b>${changeTag(coin.change)}</div>
+            ${closePrice ? `<div><span class="eyebrow">Closed at</span><b>${P.fmtPrice(closePrice)}</b></div>` : ''}
+            <div><span class="eyebrow">Participants</span><b>${c.participants}</b></div>
+            <div><span class="eyebrow">Total staked</span><b>${c.staked.toLocaleString()} LP</b></div>
+            <div><span class="eyebrow">${status === 'resolved' ? 'Status' : status === 'upcoming' ? 'Opens in' : 'Time left'}</span><b ${status === 'resolved' ? '' : `data-countdown="${status === 'upcoming' ? end - P.HOUR : end}"`}>${status === 'resolved' ? 'Closed' : P.countdown((status === 'upcoming' ? end - P.HOUR : end) - Date.now())}</b></div>
+          </div>`;
+
+        // crowd distribution (simulated around the price at the time)
+        const center = closePrice || coin.price, rnd = c.rnd, bins = new Array(21).fill(0);
+        for (let i = 0; i < Math.max(c.participants, 1) * 3; i++) {
+          const g = (rnd() + rnd() + rnd() - 1.5) / 1.5; // ~normal in [-1,1]
+          bins[Math.max(0, Math.min(20, Math.round(10 + g * 10)))]++;
+        }
+        const peak = Math.max(...bins, 1), lo = center * 0.99, hi = center * 1.01;
+        const mine = c.mine;
+        $('#crowdChart', page).innerHTML = `<div class="crowd__bars">${bins.map((b, i) => `<i style="height:${(b / peak) * 100}%" title="${P.fmtPrice(lo + ((hi - lo) * i) / 20)}"></i>`).join('')}
+          ${mine.map((f) => { const x = Math.max(0, Math.min(100, ((f.price - lo) / (hi - lo)) * 100)); return `<span class="crowd__me" style="left:${x}%">YOU</span>`; }).join('')}</div>
+          <div class="crowd__axis"><span>${P.fmtPrice(lo)}</span><span>${P.fmtPrice(center)}</span><span>${P.fmtPrice(hi)}</span></div>`;
+
+        // my calls
+        $('#myCalls', page).innerHTML = mine.length ? mine.map((f) => `<div class="list__row"><span class="mode-ico">${ico('pools')}</span><div class="list__main"><b>${P.fmtPrice(f.price)}</b><small>${f.stake} LP · ${S.ago(f.placedAt)}</small></div>${f.status === 'open' ? '<span class="pill pill--live">Open</span>' : `<span class="pill ${f.status === 'won' ? 'pill--green' : f.status === 'partial' ? 'pill--lime' : ''}">${f.payout} LP</span>`}</div>`).join('')
+          : `<div class="empty" style="padding:14px">No calls in this pool yet.</div>`;
+
+        // related pools
+        const rel = P.CATEGORIES[P.categoryOf(id)].ids.filter((x) => x !== id && P.coinFor(x)).slice(0, 5);
+        $('#related', page).innerHTML = rel.map((x) => { const rc = P.coinFor(x); return `<a class="list__row" href="#/pools/${x}?end=${P.liveEnd()}">${coinImg(rc, 30)}<div class="list__main"><b>${esc(rc.symbol.toUpperCase())}</b><small>${esc(rc.name)}</small></div><b>${P.fmtPrice(rc.price)}</b></a>`; }).join('');
+
+        // forecast form
+        const fc = $('#forecastCard', page);
+        const bal = S.get().points;
+        if (status === 'resolved') {
+          fc.innerHTML = `<div class="card__head"><h2>Pool closed</h2></div><p style="color:var(--muted);margin:0 0 14px">This round closed at <b style="color:var(--ink)">${P.fmtPrice(closePrice)}</b>.${mine.length ? ` You earned <b style="color:var(--accent)">${mine.reduce((a, f) => a + (f.payout || 0), 0)} LP</b>.` : ''}</p>
+            <a class="btn btn--primary btn--block" href="#/pools/${id}?end=${P.liveEnd()}">Go to the live ${esc(coin.symbol.toUpperCase())} pool</a>`;
+        } else if (status === 'upcoming') {
+          fc.innerHTML = `<div class="card__head"><h2>Opens soon</h2></div><p style="color:var(--muted);margin:0 0 14px">Forecasts open when the current round closes, in <b data-countdown="${end - P.HOUR}">${P.countdown(end - P.HOUR - Date.now())}</b>.</p>
+            <button class="btn btn--primary btn--block" id="remind">Remind me</button><a class="btn btn--ghost btn--block" style="margin-top:8px" href="#/pools/${id}?end=${P.liveEnd()}">Forecast the live round instead</a>`;
+          $('#remind', fc).onclick = () => { S.addReminder(`${coin.symbol.toUpperCase()} pool for ${P.fmtTime(end)} opens soon`, `#/pools/${id}?end=${end}`); toast('Reminder added to notifications'); render(); };
+        } else if (status === 'locked') {
+          fc.innerHTML = `<div class="card__head"><h2>Calls locked</h2></div><p style="color:var(--muted);margin:0 0 14px">The last 5 minutes are locked so nobody can call the close from the live price. Resolves in <b data-countdown="${end}"></b>.</p>
+            <a class="btn btn--primary btn--block" href="#/pools/${id}?end=${end + P.HOUR}">See next round</a>`;
+        } else {
+          const step = coin.price * 0.001;
+          fc.innerHTML = `<div class="card__head"><h2>Make your call</h2><a class="pill pill--lime" href="#/pools?status=mine">${bal.toLocaleString()} LP</a></div>
+            <form id="fcForm" novalidate>
+              <div class="field"><label for="fcPrice">Price at ${P.fmtTime(end)} (USD)</label>
+                <div class="nudge"><button type="button" class="btn btn--ghost" data-nudge="-1" aria-label="Lower by 0.1%">−</button><input class="input" id="fcPrice" inputmode="decimal" value="${coin.price}" /><button type="button" class="btn btn--ghost" data-nudge="1" aria-label="Raise by 0.1%">+</button></div>
+                <div class="field__err"></div>
+                <button type="button" class="link" id="useNow" style="justify-self:start;font-size:12px">Use current price (${P.fmtPrice(coin.price)})</button></div>
+              <div class="field"><label for="fcStake">Stake · <span id="stakeVal">50</span> LP</label><input type="range" id="fcStake" min="10" max="${Math.max(10, bal)}" step="5" value="${Math.min(50, Math.max(10, bal))}" ${bal < 10 ? 'disabled' : ''} />
+                <div class="quick" style="gap:6px">${[25, 50, 100].map((v) => `<button type="button" class="btn btn--ghost btn--sm" data-stake="${v}">${v}</button>`).join('')}<button type="button" class="btn btn--ghost btn--sm" data-stake="max">Max</button></div></div>
+              <div class="payout" id="payoutBox"></div>
+              ${bal < 10 ? `<p class="fine" style="text-align:left">You need at least 10 LP. <a class="link" href="#/timer?autostart=1">Focus to earn more</a>.</p>` : ''}
+              <button class="btn btn--primary btn--block btn--lg" ${bal < 10 ? 'disabled' : ''}>Place forecast</button>
+            </form>`;
+          const priceIn = $('#fcPrice', fc), stakeIn = $('#fcStake', fc);
+          const updatePayout = () => {
+            const stake = +stakeIn.value; $('#stakeVal', fc).textContent = stake;
+            const timing = P.score(1, 1, Date.now(), end).timing;
+            previewPrice = parseFloat(priceIn.value) || null; redraw();
+            $('#payoutBox', fc).innerHTML = `<div class="kv"><span>Timing bonus now</span><b>${timing.toFixed(2)}×</b></div>
+              ${[['Exact', 0], ['0.5% off', 0.005], ['1% off', 0.01], ['2%+ off', 0.02]].map(([l, e]) => `<div class="kv"><span>If ${l}</span><b class="${e < 0.02 ? 'txt-up' : ''}">${Math.round(stake * Math.max(0, 1 - e / 0.02) * timing * 2)} LP</b></div>`).join('')}`;
+          };
+          $$('[data-nudge]', fc).forEach((b) => (b.onclick = () => { const v = parseFloat(priceIn.value) || coin.price; priceIn.value = +(v + step * +b.dataset.nudge).toPrecision(8); updatePayout(); }));
+          $('#useNow', fc).onclick = () => { priceIn.value = coin.price; updatePayout(); };
+          $$('[data-stake]', fc).forEach((b) => (b.onclick = () => { stakeIn.value = b.dataset.stake === 'max' ? stakeIn.max : Math.min(+stakeIn.max, +b.dataset.stake); updatePayout(); }));
+          priceIn.oninput = updatePayout; stakeIn.oninput = updatePayout;
+          updatePayout();
+          $('#fcForm', fc).onsubmit = async (e) => {
+            e.preventDefault();
+            const price = parseFloat(priceIn.value), stake = +stakeIn.value, err = priceIn.closest('.field').querySelector('.field__err');
+            if (!(price > 0)) { priceIn.classList.add('invalid'); err.textContent = 'Enter a price above 0'; return; }
+            if (Math.abs(price - coin.price) / coin.price > 0.25) { priceIn.classList.add('invalid'); err.textContent = 'Calls must be within 25% of the current price'; return; }
+            if (P.statusOf(end) !== 'live') { toast('This round just locked — try the next one', true); render(); return; }
+            if (!(await confirmBox({ title: 'Place forecast?', body: `${coin.symbol.toUpperCase()} at ${P.fmtPrice(price)} for ${P.fmtTime(end)}, staking ${stake} LP. Calls can't be edited once placed.`, ok: 'Place forecast' }))) return;
+            try {
+              S.addForecast({ coinId: id, symbol: coin.symbol, end, price, stake });
+              toast(`Forecast placed — ${stake} LP on ${P.fmtPrice(price)}`); confetti(); render();
+            } catch (x) { toast(x.message, true); }
+          };
+        }
+        startCountdowns(page);
+      };
+      renderAll();
+      const refresh = setInterval(() => P.loadMarkets(true).then(() => alive && loadChartData()), 60000);
+      const until = end - Date.now();
+      const flip = until > 0 ? setTimeout(() => render(), Math.min(until - (P.statusOf(end) === 'live' ? P.LOCK : 0), 2 ** 31 - 1) + 1000) : 0;
+      return () => { alive = false; clearInterval(refresh); clearTimeout(flip); clearInterval(countdownTimer); removeEventListener('resize', onResize); };
     },
   };
 }

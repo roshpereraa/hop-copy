@@ -13,7 +13,7 @@ const uid = () => Math.random().toString(36).slice(2, 9);
 export const code = () => Array.from({ length: 6 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random() * 32)]).join('');
 
 function fresh() {
-  return { user: null, sessions: [], squads: [], notifications: [], presets: [], settings: defaultSettings() };
+  return { user: null, sessions: [], squads: [], notifications: [], presets: [], forecasts: [], points: 500, settings: defaultSettings() };
 }
 function defaultSettings() {
   return { goal: 120, defaultMode: 'sprint', customMinutes: 45, shield: true, notifications: true, sounds: true, reducedMotion: false, calendar: false, weeklyEmail: true };
@@ -22,6 +22,8 @@ function defaultSettings() {
 let state;
 try { state = { ...fresh(), ...JSON.parse(localStorage.getItem(KEY) || '{}') }; } catch { state = fresh(); }
 state.settings = { ...defaultSettings(), ...state.settings };
+if (typeof state.points !== 'number') state.points = 500;
+if (!Array.isArray(state.forecasts)) state.forecasts = [];
 
 const listeners = new Set();
 export const subscribe = (fn) => (listeners.add(fn), () => listeners.delete(fn));
@@ -76,6 +78,7 @@ export const distanceOf = (minutes, streak = 0) => Math.round(minutes * 0.42 * (
 export function addSession({ mode, minutes, task, completed, distractions }) {
   const sess = { id: uid(), ts: Date.now(), mode, minutes, task: task || 'Untitled focus', completed, distractions };
   state.sessions.unshift(sess);
+  state.points += minutes; // 1 Lift point per focused minute
   if (completed) notify(`Nice landing — ${minutes} min of ${MODES[mode].label.toLowerCase()} focus logged`, '#/log');
   save();
   return sess;
@@ -141,3 +144,23 @@ export function ago(ts) {
   const d = Math.round(s / 86400);
   return d === 1 ? 'yesterday' : `${d} days ago`;
 }
+
+/* ---------- Lift points & forecast pools (play points only, no cash value) ---------- */
+export function addForecast(f) {
+  if (f.stake > state.points) throw new Error('Not enough Lift points');
+  state.points -= f.stake;
+  const fc = { id: uid(), placedAt: Date.now(), status: 'open', ...f };
+  state.forecasts.unshift(fc);
+  save();
+  return fc;
+}
+export function settleForecast(id, { actual, payout, accuracy }) {
+  const f = state.forecasts.find((x) => x.id === id);
+  if (!f || f.status !== 'open') return null;
+  Object.assign(f, { status: payout > f.stake ? 'won' : payout > 0 ? 'partial' : 'lost', actual, payout, accuracy, settledAt: Date.now() });
+  state.points += payout;
+  notify(`${f.symbol.toUpperCase()} pool resolved at ${actual} — you ${payout > 0 ? `earned ${payout} LP` : 'missed this one'}`, `#/pools/${f.coinId}?end=${f.end}`);
+  save();
+  return f;
+}
+export function addReminder(text, href) { notify(text, href); save(); }
